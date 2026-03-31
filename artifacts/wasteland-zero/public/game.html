@@ -729,14 +729,40 @@ function damagePlayer(dmg) {
 }
 
 function spawnEnemy() {
-  // Random edge
+  // Spawn just outside the player's viewport so they walk in from off-screen.
+  // We clamp to world bounds so they're never stuck outside the collision walls.
   let x, y;
   const side = Math.floor(Math.random() * 4);
-  const margin = 60;
-  if (side === 0) { x = Math.random() * WORLD_W; y = -margin; }
-  else if (side === 1) { x = WORLD_W + margin; y = Math.random() * WORLD_H; }
-  else if (side === 2) { x = Math.random() * WORLD_W; y = WORLD_H + margin; }
-  else { x = -margin; y = Math.random() * WORLD_H; }
+  const vw = canvas.width;
+  const vh = canvas.height;
+  const pad = 80; // pixels outside the viewport edge to spawn at
+
+  const camX = state.cam.x;
+  const camY = state.cam.y;
+
+  const wallPad = 20; // min distance from world edge
+
+  if (side === 0) {
+    // Top edge
+    x = camX + Math.random() * vw;
+    y = camY - pad;
+  } else if (side === 1) {
+    // Right edge
+    x = camX + vw + pad;
+    y = camY + Math.random() * vh;
+  } else if (side === 2) {
+    // Bottom edge
+    x = camX + Math.random() * vw;
+    y = camY + vh + pad;
+  } else {
+    // Left edge
+    x = camX - pad;
+    y = camY + Math.random() * vh;
+  }
+
+  // Clamp inside the world so they're never blocked by boundary walls
+  x = Math.max(wallPad, Math.min(WORLD_W - wallPad, x));
+  y = Math.max(wallPad, Math.min(WORLD_H - wallPad, y));
 
   // Pick type based on wave
   const roll = Math.random();
