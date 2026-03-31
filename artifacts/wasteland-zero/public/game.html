@@ -212,6 +212,122 @@
   }
   .weapon-stats span { color: #888; }
 
+  /* ── VERSION TAG (main menu) ─────────────────── */
+  .version-tag {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 3px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  /* ── PAUSE SCREEN ─────────────────────────────── */
+  #pauseScreen {
+    background: rgba(0,0,0,0.88);
+    z-index: 30;
+  }
+  .pause-title {
+    font-size: 52px;
+    font-weight: bold;
+    color: #c0392b;
+    letter-spacing: 10px;
+    text-shadow: 0 0 24px #c0392b66;
+    margin-bottom: 6px;
+  }
+  .pause-hint {
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 3px;
+    margin-bottom: 44px;
+  }
+  .pause-buttons { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+
+  /* ── CHANGELOG SCREEN ─────────────────────────── */
+  #changelogScreen {
+    background: rgba(0,0,0,0.96);
+    z-index: 40;
+    justify-content: flex-start;
+    padding: 44px 0 40px;
+  }
+  .changelog-header {
+    font-size: 26px;
+    font-weight: bold;
+    color: #c0392b;
+    letter-spacing: 8px;
+    margin-bottom: 4px;
+  }
+  .changelog-sub {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+  }
+  .changelog-list {
+    width: 580px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding-right: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #333 transparent;
+  }
+  .changelog-entry {
+    border: 1px solid #2a2a2a;
+    background: #0d0d0d;
+    padding: 18px 22px;
+  }
+  .changelog-entry-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .cl-version {
+    font-size: 14px;
+    font-weight: bold;
+    color: #c0392b;
+    letter-spacing: 2px;
+    min-width: 40px;
+  }
+  .cl-title {
+    font-size: 13px;
+    color: #ddd;
+    letter-spacing: 1px;
+    flex: 1;
+  }
+  .cl-date {
+    font-size: 10px;
+    color: #444;
+    letter-spacing: 1px;
+  }
+  .cl-notes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .cl-notes li {
+    font-size: 11px;
+    color: #666;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+  }
+  .cl-notes li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: #c0392b;
+  }
+
   /* ── LEVEL-UP ────────────────────────────────── */
   #levelupScreen { background: rgba(0,0,0,0.92); }
   .levelup-title {
@@ -291,6 +407,26 @@
     <span>WASD</span> Move &nbsp;|&nbsp; <span>MOUSE</span> Aim &nbsp;|&nbsp; <span>LMB</span> Shoot &nbsp;|&nbsp; <span>R</span> Reload<br/>
     Walk over weapons to pick them up &nbsp;|&nbsp; Kill enemies for XP and level up
   </div>
+  <div class="version-tag" id="menuVersion"></div>
+</div>
+
+<!-- ═══ PAUSE SCREEN ══════════════════════════════════ -->
+<div id="pauseScreen" class="screen hidden">
+  <div class="pause-title">PAUSED</div>
+  <div class="pause-hint">PRESS ESC OR P TO RESUME</div>
+  <div class="pause-buttons">
+    <button class="btn" id="pauseResumeBtn" style="width:240px;">▶ RESUME</button>
+    <button class="btn secondary" id="pauseChangelogBtn" style="width:240px;">CHANGELOG</button>
+    <button class="btn secondary" id="pauseMenuBtn" style="width:240px;">MAIN MENU</button>
+  </div>
+</div>
+
+<!-- ═══ CHANGELOG SCREEN ══════════════════════════════ -->
+<div id="changelogScreen" class="screen hidden">
+  <div class="changelog-header">CHANGELOG</div>
+  <div class="changelog-sub">WASTELAND ZERO — VERSION HISTORY</div>
+  <div class="changelog-list" id="changelogList"></div>
+  <button class="btn secondary" id="changelogBackBtn" style="margin-top:28px;width:200px;">← BACK</button>
 </div>
 
 <!-- ═══ CHARACTER SELECT ═══════════════════════════ -->
@@ -343,6 +479,59 @@
 // =============================================================
 // CONSTANTS
 // =============================================================
+const CURRENT_VERSION = 'v1.3';
+
+const CHANGELOG = [
+  {
+    version: 'v1.3',
+    date: '2026-03-31',
+    title: 'Enemy Overhaul — Detailed Sprites',
+    notes: [
+      'Runner: arachnoid with 6 animated legs, mandibles & glowing red eyes',
+      'Brute: armored hulk with shoulder spikes, huge fists & grill mouth',
+      'Spitter: frog mutant with eye stalks, acid teeth & glowing acid sac',
+      'All enemies face the player and scale to their natural size',
+      'Low-HP flash and color-coded health bars (green → orange → red)',
+    ]
+  },
+  {
+    version: 'v1.2',
+    date: '2026-03-30',
+    title: 'Character & Weapon Select',
+    notes: [
+      '6 playable survivors: Ghost, Viper, Rust, Reaper, Nova, Scorched',
+      'Each survivor has canvas-drawn design and unique stat bonuses',
+      '3 starting weapons: Pistol, Shotgun, SMG with stat displays',
+      'Pre-game flow: Main Menu → Choose Survivor → Choose Weapon → Deploy',
+      'After death, return to character select (not main menu)',
+    ]
+  },
+  {
+    version: 'v1.1',
+    date: '2026-03-30',
+    title: 'Enemy Types & Spawn Fix',
+    notes: [
+      'Fixed enemy spawn bug — enemies no longer stuck outside world bounds',
+      'Enemies now spawn just outside the player\'s viewport',
+      '3 distinct enemy types: Runner (fast), Brute (tanky), Spitter (ranged)',
+      'Enemies dynamically face toward the player each frame',
+      'Weapon pickups (Shotgun/SMG) spawn every 60 seconds in the world',
+    ]
+  },
+  {
+    version: 'v1.0',
+    date: '2026-03-29',
+    title: 'Initial Release',
+    notes: [
+      'Wave-based top-down survival shooter on canvas',
+      'XP leveling with 3-choice upgrade cards per level',
+      'World size 3200×3200 with camera tracking and minimap',
+      'WASD movement, mouse aim, LMB shoot, R reload',
+      'Score, wave counter, kills tracker',
+    ]
+  }
+];
+
 const WORLD_W = 3200;
 const WORLD_H = 3200;
 const TILE_SIZE = 64;
@@ -787,6 +976,60 @@ document.getElementById('goMenuBtn').addEventListener('click', () => {
 });
 
 // =============================================================
+// PAUSE & CHANGELOG
+// =============================================================
+function buildChangelogList() {
+  const list = document.getElementById('changelogList');
+  if (list.children.length > 0) return; // already built
+  CHANGELOG.forEach(entry => {
+    const div = document.createElement('div');
+    div.className = 'changelog-entry';
+    div.innerHTML = `
+      <div class="changelog-entry-header">
+        <span class="cl-version">${entry.version}</span>
+        <span class="cl-title">${entry.title}</span>
+        <span class="cl-date">${entry.date}</span>
+      </div>
+      <ul class="cl-notes">
+        ${entry.notes.map(n => `<li>${n}</li>`).join('')}
+      </ul>`;
+    list.appendChild(div);
+  });
+}
+
+function openPause() {
+  document.getElementById('pauseScreen').classList.remove('hidden');
+  gameState = 'paused';
+}
+
+function closePause() {
+  document.getElementById('pauseScreen').classList.add('hidden');
+  document.getElementById('changelogScreen').classList.add('hidden');
+  gameState = 'playing';
+}
+
+document.getElementById('pauseResumeBtn').addEventListener('click', closePause);
+
+document.getElementById('pauseChangelogBtn').addEventListener('click', () => {
+  buildChangelogList();
+  document.getElementById('changelogScreen').classList.remove('hidden');
+});
+
+document.getElementById('changelogBackBtn').addEventListener('click', () => {
+  document.getElementById('changelogScreen').classList.add('hidden');
+});
+
+document.getElementById('pauseMenuBtn').addEventListener('click', () => {
+  document.getElementById('pauseScreen').classList.add('hidden');
+  document.getElementById('changelogScreen').classList.add('hidden');
+  showScreen('menuScreen');
+  gameState = 'menu';
+});
+
+// Set version tag on main menu
+document.getElementById('menuVersion').textContent = CURRENT_VERSION;
+
+// =============================================================
 // WORLD GENERATION
 // =============================================================
 function generateObstacles() {
@@ -905,6 +1148,14 @@ function setupInput() {
   window.addEventListener('keydown', e => {
     keys[e.code] = true;
     if (e.code === 'KeyR' && gameState === 'playing') startReload();
+    if ((e.code === 'Escape' || e.code === 'KeyP') && gameState === 'playing') { openPause(); e.preventDefault(); }
+    if ((e.code === 'Escape' || e.code === 'KeyP') && gameState === 'paused') {
+      // If changelog is open, close just that; otherwise close pause
+      const cl = document.getElementById('changelogScreen');
+      if (!cl.classList.contains('hidden')) { cl.classList.add('hidden'); }
+      else { closePause(); }
+      e.preventDefault();
+    }
     if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
   });
   window.addEventListener('keyup', e => { keys[e.code] = false; });
