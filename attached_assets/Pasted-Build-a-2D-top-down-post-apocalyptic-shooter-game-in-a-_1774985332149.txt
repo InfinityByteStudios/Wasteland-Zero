@@ -1,0 +1,82 @@
+Build a 2D top-down post-apocalyptic shooter game in a single HTML file using vanilla JavaScript and an HTML5 Canvas. No external libraries or frameworks.
+Core Concept:
+The player is a lone survivor in a ruined wasteland city. Waves of mutant enemies spawn and close in from all sides. The goal is to survive as long as possible and rack up the highest score.
+Player:
+
+Rendered as a small circular or square sprite in the center of the canvas
+Moves in all 4 directions using WASD keys
+Aims with the mouse cursor — the player always rotates to face the mouse
+Shoots projectiles toward the mouse position on left click or by holding left click
+Has a health bar displayed in the HUD (top-left)
+Has a limited ammo counter with a reload mechanic (press R to reload, takes 1.5 seconds)
+Dies when health reaches 0 — triggers game over screen
+
+Enemies:
+
+3 enemy types:
+
+Runner — fast, low health, deals low damage on contact
+Brute — slow, high health, deals high damage on contact
+Spitter — medium speed, ranged, fires acid projectiles at the player every 2 seconds
+
+
+Enemies spawn from random edges of the canvas
+Spawn rate and quantity increase every 30 seconds (wave escalation)
+All enemies pathfind directly toward the player
+Each enemy type is a different color (e.g. red, orange, green) for easy identification
+Enemies drop XP orbs on death
+
+Progression:
+
+Player earns XP from killing enemies
+On level up, display 3 random upgrade cards the player must choose from (pause the game while choosing)
+Example upgrades: increased fire rate, larger bullet, faster movement speed, health regen, extra max health, piercing bullets, spread shot
+
+Weapons:
+
+Default weapon: pistol (semi-auto, moderate damage, moderate fire rate)
+Weapon pickups spawn randomly on the map every 60 seconds:
+
+Shotgun — fires 5 pellets in a spread
+SMG — full-auto, fast fire rate, low damage per bullet
+
+
+Pickups are glowing icons on the ground; player walks over them to collect
+
+Map / World:
+
+The world is larger than the canvas — implement a camera that follows the player
+Tile-based ground using a dark cracked-concrete texture drawn with canvas (use rectangles, lines, and noise patterns — no image files)
+Randomly place rubble/debris obstacles (solid rectangles) that block movement for both player and enemies
+World boundary walls the player and enemies cannot pass through
+
+HUD:
+
+Top-left: Health bar (red fill, grey background, labeled "HP")
+Top-right: Ammo counter ("12 / 30") and current weapon name
+Bottom-center: XP bar showing progress to next level, and current level number
+Center-top: Current wave number and score
+
+Visual Style:
+
+Dark color palette — near-black background, dark grey ground tiles
+Enemy and player colors should be desaturated and gritty (muted reds, dirty greens, rust orange)
+Muzzle flash effect when firing (brief white/yellow circle at gun barrel)
+Screen shake on taking damage (shift canvas by a few pixels for 200ms)
+XP orbs are small glowing cyan dots
+Bullet impact particles (3–5 small grey dots that fade out quickly)
+
+Game States:
+
+Main Menu — title "WASTELAND ZERO", a Start button, and a brief control reference
+Playing — full game loop
+Level Up — paused, upgrade card selection overlay
+Game Over — shows final score, wave reached, kills, and a Restart button
+
+Code Requirements:
+
+All in one index.html file with embedded <style> and <script> tags
+Use a proper game loop with requestAnimationFrame
+Delta time for frame-rate independent movement
+Clean, commented code with clearly separated sections: constants, state, input handling, update logic, draw logic, UI
+All UI styling in CSS within the <style> tag

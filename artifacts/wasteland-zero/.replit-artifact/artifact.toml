@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Wasteland Zero"
+version = "1.0.0"
+id = "artifacts/wasteland-zero"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19752
+
+[services.development]
+run = "pnpm --filter @workspace/wasteland-zero run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/wasteland-zero", "run", "build" ]
+publicDir = "artifacts/wasteland-zero/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19752"
+BASE_PATH = "/"
