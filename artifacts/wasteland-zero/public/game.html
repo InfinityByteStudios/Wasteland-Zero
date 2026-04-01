@@ -404,7 +404,7 @@
   <div class="game-subtitle">SURVIVE. KILL. EVOLVE.</div>
   <button class="btn" id="startBtn">ENTER THE WASTELAND</button>
   <div class="controls-ref">
-    <span>WASD</span> Move &nbsp;|&nbsp; <span>MOUSE</span> Aim &nbsp;|&nbsp; <span>LMB</span> Shoot &nbsp;|&nbsp; <span>R</span> Reload &nbsp;|&nbsp; <span>ESC / P</span> Pause<br/>
+    <span>WASD</span> Move &nbsp;|&nbsp; <span>MOUSE</span> Aim &nbsp;|&nbsp; <span>LMB</span> Shoot &nbsp;|&nbsp; <span>R</span> Reload &nbsp;|&nbsp; <span>SPACE / SHIFT</span> Dash &nbsp;|&nbsp; <span>ESC / P</span> Pause<br/>
     Walk over weapons to pick them up &nbsp;|&nbsp; Kill enemies for XP and level up
   </div>
   <div class="version-tag" id="menuVersion"></div>
@@ -479,9 +479,22 @@
 // =============================================================
 // CONSTANTS
 // =============================================================
-const CURRENT_VERSION = 'v1.3';
+const CURRENT_VERSION = 'v1.4';
 
 const CHANGELOG = [
+  {
+    version: 'v1.4',
+    date: '2026-04-01',
+    title: 'Dash & Enemy Pathfinding Fix',
+    notes: [
+      'New dash ability — press SPACE or SHIFT to dash in your movement direction',
+      'Dash grants brief invincibility and a speed burst (1.5s cooldown)',
+      'Dash cooldown shown as a bar on the HUD',
+      'Fixed large enemies (Brutes) getting stuck inside rocks',
+      'Enemies now steer around obstacles instead of stopping dead',
+      'Enemies no longer spawn inside obstacles',
+    ]
+  },
   {
     version: 'v1.3',
     date: '2026-03-31',
@@ -538,6 +551,10 @@ const TILE_SIZE = 64;
 const PLAYER_SPEED_BASE = 180;
 const PLAYER_MAX_HP = 100;
 const RELOAD_TIME = 1500;
+const DASH_SPEED_MULT = 3.5;
+const DASH_DURATION = 120;   // ms
+const DASH_COOLDOWN = 1500; // ms
+const DASH_INVINCIBLE = 200; // ms of invincibility after dash starts
 
 // =============================================================
 // CHARACTER DEFINITIONS
@@ -1106,6 +1123,10 @@ function initState() {
       reloading: false, reloadTimer: 0, reloadTimeMult,
       invincible: 0,
       muzzleFlash: 0,
+      dashTimer: 0,
+      dashCooldown: 0,
+      dashDx: 0,
+      dashDy: 0,
       bulletSizeMult: 1,
       damageMult,
       piercing: false,
@@ -1152,6 +1173,7 @@ function setupInput() {
   window.addEventListener('keydown', e => {
     keys[e.code] = true;
     if (e.code === 'KeyR' && gameState === 'playing') startReload();
+    if ((e.code === 'Space' || e.code === 'ShiftLeft' || e.code === 'ShiftRight') && gameState === 'playing') startDash();
     if ((e.code === 'Escape' || e.code === 'KeyP') && gameState === 'playing') { openPause(); e.preventDefault(); }
     if ((e.code === 'Escape' || e.code === 'KeyP') && gameState === 'paused') {
       // If changelog is open, close just that; otherwise close pause
@@ -1212,6 +1234,10 @@ function update(dt, ts) {
     state.shake.y = (Math.random()-0.5)*5;
   } else { state.shake.x = 0; state.shake.y = 0; }
 
+  // Dash timers
+  if (p.dashTimer > 0) p.dashTimer -= dt * 1000;
+  if (p.dashCooldown > 0) p.dashCooldown -= dt * 1000;
+
   // Movement
   let dx = 0, dy = 0;
   if (keys['KeyW']||keys['ArrowUp'])    dy -= 1;
@@ -1220,11 +1246,25 @@ function update(dt, ts) {
   if (keys['KeyD']||keys['ArrowRight']) dx += 1;
   if (dx!==0&&dy!==0) { dx*=0.707; dy*=0.707; }
 
+  // If dashing, override direction & speed
+  let moveSpeed = p.speed;
+  let moveDx = dx, moveDy = dy;
+  if (p.dashTimer > 0) {
+    moveDx = p.dashDx;
+    moveDy = p.dashDy;
+    moveSpeed = p.speed * DASH_SPEED_MULT;
+  }
+
   const pr = 12;
-  const nx = p.x + dx*p.speed*dt;
-  const ny = p.y + dy*p.speed*dt;
+  const nx = p.x + moveDx*moveSpeed*dt;
+  const ny = p.y + moveDy*moveSpeed*dt;
   if (!collidesWithObstacles(nx, p.y, pr)) p.x = Math.max(pr, Math.min(WORLD_W-pr, nx));
   if (!collidesWithObstacles(p.x, ny, pr)) p.y = Math.max(pr, Math.min(WORLD_H-pr, ny));
+
+  // Dash trail particles
+  if (p.dashTimer > 0) {
+    spawnParticles(p.x, p.y, p.charColor + '88', 1);
+  }
 
   // Aim
   const wx = p.x - state.cam.x, wy = p.y - state.cam.y;
@@ -1322,13 +1362,9 @@ function update(dt, ts) {
     if (et.ranged) {
       const preferred = 250;
       if (dist > preferred+20) {
-        const nx2=e.x+(ex/dist)*et.speed*dt, ny2=e.y+(ey/dist)*et.speed*dt;
-        if (!collidesWithObstacles(nx2, e.y, e.size)) e.x=nx2;
-        if (!collidesWithObstacles(e.x, ny2, e.size)) e.y=ny2;
+        moveEnemyToward(e, et, ex/dist, ey/dist, dt);
       } else if (dist < preferred-20) {
-        const nx2=e.x-(ex/dist)*et.speed*dt, ny2=e.y-(ey/dist)*et.speed*dt;
-        if (!collidesWithObstacles(nx2, e.y, e.size)) e.x=nx2;
-        if (!collidesWithObstacles(e.x, ny2, e.size)) e.y=ny2;
+        moveEnemyToward(e, et, -ex/dist, -ey/dist, dt);
       }
       e.fireTimer = (e.fireTimer||0) + dt*1000;
       if (e.fireTimer >= et.fireInterval) {
@@ -1338,9 +1374,7 @@ function update(dt, ts) {
       }
     } else {
       if (dist > e.size+12) {
-        const nx2=e.x+(ex/dist)*et.speed*dt, ny2=e.y+(ey/dist)*et.speed*dt;
-        if (!collidesWithObstacles(nx2, e.y, e.size)) e.x=nx2;
-        if (!collidesWithObstacles(e.x, ny2, e.size)) e.y=ny2;
+        moveEnemyToward(e, et, ex/dist, ey/dist, dt);
       }
       if (dist < e.size+14 && p.invincible<=0) { damagePlayer(et.damage); p.invincible=600; }
     }
@@ -1382,6 +1416,51 @@ function collidesWithObstacles(x, y, r) {
   return false;
 }
 
+// Move an enemy along (dirX,dirY), steering around obstacles if blocked
+function moveEnemyToward(e, et, dirX, dirY, dt) {
+  const step = et.speed * dt;
+  const nx2 = e.x + dirX * step;
+  const ny2 = e.y + dirY * step;
+  const blockedX = collidesWithObstacles(nx2, e.y, e.size);
+  const blockedY = collidesWithObstacles(e.x, ny2, e.size);
+
+  if (!blockedX) e.x = nx2;
+  if (!blockedY) e.y = ny2;
+
+  // If both axes blocked, try perpendicular slide to get around obstacles
+  if (blockedX && blockedY) {
+    // Try sliding perpendicular to direction
+    const slideX = e.x - dirY * step;
+    const slideY = e.y + dirX * step;
+    if (!collidesWithObstacles(slideX, e.y, e.size)) e.x = slideX;
+    else if (!collidesWithObstacles(e.x, slideY, e.size)) e.y = slideY;
+  } else if (blockedX && !blockedY) {
+    // Slide along Y more aggressively
+    const extra = e.y + dirY * step * 0.5;
+    if (!collidesWithObstacles(e.x, extra, e.size)) e.y = extra;
+  } else if (blockedY && !blockedX) {
+    // Slide along X more aggressively
+    const extra = e.x + dirX * step * 0.5;
+    if (!collidesWithObstacles(extra, e.y, e.size)) e.x = extra;
+  }
+
+  // Push enemy out if somehow inside an obstacle
+  for (const o of state.obstacles) {
+    if (e.x+e.size > o.x && e.x-e.size < o.x+o.w && e.y+e.size > o.y && e.y-e.size < o.y+o.h) {
+      // Find shortest exit direction
+      const pushL = (e.x + e.size) - o.x;
+      const pushR = (o.x + o.w) - (e.x - e.size);
+      const pushU = (e.y + e.size) - o.y;
+      const pushD = (o.y + o.h) - (e.y - e.size);
+      const minPush = Math.min(pushL, pushR, pushU, pushD);
+      if (minPush === pushL) e.x = o.x - e.size - 1;
+      else if (minPush === pushR) e.x = o.x + o.w + e.size + 1;
+      else if (minPush === pushU) e.y = o.y - e.size - 1;
+      else e.y = o.y + o.h + e.size + 1;
+    }
+  }
+}
+
 function fire(ts) {
   const p = state.player;
   const wep = p.weapon;
@@ -1393,6 +1472,25 @@ function fire(ts) {
     const tipY = p.y + Math.sin(p.angle)*18;
     state.bullets.push({ x:tipX, y:tipY, vx:Math.cos(angle)*wep.bulletSpeed, vy:Math.sin(angle)*wep.bulletSpeed, damage:wep.damage, life:1800, radius:4*p.bulletSizeMult, color:'#ffe066', dead:false });
   }
+}
+
+function startDash() {
+  const p = state.player;
+  if (p.dashCooldown > 0 || p.dashTimer > 0) return;
+  // Dash in movement direction, or facing direction if standing still
+  let dx = 0, dy = 0;
+  if (keys['KeyW']||keys['ArrowUp'])    dy -= 1;
+  if (keys['KeyS']||keys['ArrowDown'])  dy += 1;
+  if (keys['KeyA']||keys['ArrowLeft'])  dx -= 1;
+  if (keys['KeyD']||keys['ArrowRight']) dx += 1;
+  if (dx === 0 && dy === 0) { dx = Math.cos(p.angle); dy = Math.sin(p.angle); }
+  const len = Math.sqrt(dx*dx + dy*dy);
+  if (len > 0) { dx /= len; dy /= len; }
+  p.dashDx = dx;
+  p.dashDy = dy;
+  p.dashTimer = DASH_DURATION;
+  p.dashCooldown = DASH_COOLDOWN;
+  p.invincible = Math.max(p.invincible, DASH_INVINCIBLE);
 }
 
 function startReload() {
@@ -1420,6 +1518,19 @@ function spawnEnemy() {
   else               { x=camX-pad; y=camY+Math.random()*vh; }
   x=Math.max(wallPad, Math.min(WORLD_W-wallPad, x));
   y=Math.max(wallPad, Math.min(WORLD_H-wallPad, y));
+
+  // Don't spawn inside obstacles — try up to 8 offsets
+  if (collidesWithObstacles(x, y, 20)) {
+    let placed = false;
+    for (let attempt = 0; attempt < 8; attempt++) {
+      const ox = x + (Math.random()-0.5)*160;
+      const oy = y + (Math.random()-0.5)*160;
+      const cx2 = Math.max(wallPad, Math.min(WORLD_W-wallPad, ox));
+      const cy2 = Math.max(wallPad, Math.min(WORLD_H-wallPad, oy));
+      if (!collidesWithObstacles(cx2, cy2, 20)) { x=cx2; y=cy2; placed=true; break; }
+    }
+    if (!placed) return; // skip this spawn entirely
+  }
 
   const roll = Math.random();
   let type;
@@ -1577,8 +1688,9 @@ function drawPlayer() {
   ctx.rotate(p.angle);
 
   const flash = p.invincible>0 && Math.floor(p.invincible/80)%2===0;
-  const bodyColor = flash ? '#fff' : p.charColor;
-  const darkColor  = flash ? '#ccc' : p.charColorDark;
+  const isDashing = p.dashTimer > 0;
+  const bodyColor = flash ? '#fff' : isDashing ? '#88ddff' : p.charColor;
+  const darkColor  = flash ? '#ccc' : isDashing ? '#55aacc' : p.charColorDark;
 
   // Body
   ctx.fillStyle = bodyColor;
@@ -2058,10 +2170,20 @@ function drawHUD() {
   ctx.fillText(`${Math.ceil(p.hp)} / ${p.maxHp}`, barX+barW/2, barY+barH-2);
 
   // Character indicator (colored dot + name)
-  ctx.fillStyle = charColor;
+  ctx.fillStyle=charColor;
   ctx.beginPath(); ctx.arc(20, 48, 5, 0, Math.PI*2); ctx.fill();
   ctx.font='10px Courier New'; ctx.textAlign='left'; ctx.fillStyle=charColor;
   ctx.fillText(CHARACTERS.find(c=>c.id===selectedCharId)?.name||'', 30, 52);
+
+  // Dash cooldown bar
+  const dashPct = p.dashCooldown > 0 ? 1 - (p.dashCooldown / DASH_COOLDOWN) : 1;
+  const dbX = 16, dbY = 60, dbW = 80, dbH = 6;
+  ctx.fillStyle = '#222'; ctx.fillRect(dbX, dbY, dbW, dbH);
+  ctx.fillStyle = dashPct >= 1 ? '#00ccff' : '#005577';
+  ctx.fillRect(dbX, dbY, dbW * dashPct, dbH);
+  ctx.strokeStyle = '#444'; ctx.lineWidth = 0.5; ctx.strokeRect(dbX, dbY, dbW, dbH);
+  ctx.fillStyle = dashPct >= 1 ? '#00ccff' : '#556'; ctx.font = '9px Courier New'; ctx.textAlign = 'left';
+  ctx.fillText(dashPct >= 1 ? 'DASH READY' : 'DASH', dbX + dbW + 6, dbY + 5.5);
 
   // Ammo (top right)
   const wep=p.weapon;

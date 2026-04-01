@@ -1,3 +1,11 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+  <rect width="180" height="180" rx="24" fill="#0a0a0a"/>
+  <rect x="4" y="4" width="172" height="172" rx="20" fill="none" stroke="#c0392b" stroke-width="3" opacity="0.6"/>
+  <!-- W -->
+  <text x="90" y="95" font-family="'Courier New', monospace" font-size="72" font-weight="bold" text-anchor="middle" fill="#c0392b" letter-spacing="2">W</text>
+  <!-- 0 -->
+  <text x="90" y="155" font-family="'Courier New', monospace" font-size="56" font-weight="bold" text-anchor="middle" fill="#e8e8e8" letter-spacing="2">0</text>
+  <!-- Crosshair accent -->
+  <line x1="80" y1="40" x2="100" y2="40" stroke="#c0392b" stroke-width="1.5" opacity="0.4"/>
+  <line x1="90" y1="30" x2="90" y2="50" stroke="#c0392b" stroke-width="1.5" opacity="0.4"/>
 </svg>
