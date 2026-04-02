@@ -212,6 +212,72 @@
   }
   .weapon-stats span { color: #888; }
 
+  /* ── DIFFICULTY SELECT ──────────────────────── */
+  .diff-grid {
+    display: flex;
+    gap: 14px;
+    pointer-events: all;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 860px;
+  }
+  .diff-card {
+    width: 148px;
+    padding: 20px 14px 16px;
+    border: 2px solid #2a2a2a;
+    background: #0d0d0d;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: center;
+    position: relative;
+  }
+  .diff-card:hover { border-color: #555; background: #141414; }
+  .diff-card.selected {
+    border-color: #c0392b !important;
+    background: #180808 !important;
+    box-shadow: 0 0 18px #c0392b44;
+  }
+  .diff-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 6px; right: 8px;
+    color: #c0392b;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .diff-name {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .diff-desc {
+    font-size: 10px;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .diff-mods {
+    font-size: 9px;
+    color: #555;
+    line-height: 1.6;
+    text-align: left;
+    padding: 0 4px;
+  }
+  .diff-mods span.buff { color: #3d9e5c; }
+  .diff-mods span.nerf { color: #c0392b; }
+  .diff-mods span.neutral { color: #888; }
+  .diff-default-tag {
+    display: inline-block;
+    font-size: 8px;
+    color: #c0392b;
+    border: 1px solid #c0392b55;
+    padding: 1px 6px;
+    letter-spacing: 1px;
+    margin-top: 8px;
+  }
+
   /* ── VERSION TAG (main menu) ─────────────────── */
   .version-tag {
     position: absolute;
@@ -369,6 +435,32 @@
   }
   .upgrade-card .card-desc { font-size: 11px; color: #888; line-height: 1.5; }
 
+  /* ── SHOP CARDS ──────────────────────────────── */
+  .shop-card {
+    width: 150px;
+    padding: 16px 12px;
+    border: 2px solid #333;
+    background: #111;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .shop-card:hover {
+    border-color: #f1c40f;
+    background: #1a1700;
+    box-shadow: 0 0 16px #f1c40f44;
+  }
+  .shop-card.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-color: #222;
+  }
+  .shop-card .card-icon { font-size: 24px; margin-bottom: 6px; }
+  .shop-card .card-name { font-size: 11px; font-weight: bold; color: #f1c40f; letter-spacing: 1px; margin-bottom: 4px; }
+  .shop-card .card-desc { font-size: 10px; color: #777; line-height: 1.4; margin-bottom: 8px; }
+  .shop-card .card-cost { font-size: 13px; font-weight: bold; color: #f1c40f; }
+  .shop-card.disabled .card-cost { color: #c0392b; }
+
   /* ── GAME OVER ───────────────────────────────── */
   #gameoverScreen .go-title {
     font-size: 52px;
@@ -394,6 +486,311 @@
     text-transform: uppercase;
   }
   .go-buttons { display: flex; gap: 12px; }
+
+  /* ── ABOUT / HOW TO PLAY SCREEN ────────────── */
+  #aboutScreen {
+    background: #050505;
+    z-index: 40;
+    justify-content: flex-start;
+    padding: 0;
+    overflow: hidden;
+    flex-direction: column;
+  }
+  /* ── Wiki Top Header ── */
+  .wiki-header {
+    width: 100%;
+    height: 56px;
+    min-height: 56px;
+    background: #0a0a0a;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+    z-index: 5;
+  }
+  .wiki-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .wiki-header-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: #c0392b;
+    letter-spacing: 6px;
+    text-shadow: 0 0 20px rgba(192,57,43,0.25);
+  }
+  .wiki-header-divider {
+    width: 1px;
+    height: 24px;
+    background: #222;
+  }
+  .wiki-header-sub {
+    font-size: 10px;
+    color: #3a3a3a;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .wiki-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .wiki-header-link {
+    font-size: 9px;
+    color: #333;
+    letter-spacing: 2px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .wiki-header-link:hover { color: #c0392b; }
+  .wiki-back-btn {
+    background: transparent;
+    border: 1px solid #222;
+    color: #555;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 6px 18px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .wiki-back-btn:hover {
+    border-color: #c0392b;
+    color: #c0392b;
+  }
+
+  /* ── Wiki Body (sidebar + content) ── */
+  .wiki-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  /* ── Sidebar ── */
+  .wiki-sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: #080808;
+    border-right: 1px solid #141414;
+    overflow-y: auto;
+    padding: 20px 0;
+    flex-shrink: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #1a1a1a transparent;
+  }
+  .wiki-sidebar::-webkit-scrollbar { width: 4px; }
+  .wiki-sidebar::-webkit-scrollbar-track { background: transparent; }
+  .wiki-sidebar::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 2px; }
+  .wiki-sidebar-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #2a2a2a;
+    padding: 0 20px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .wiki-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #4a4a4a;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    user-select: none;
+  }
+  .wiki-nav-item:hover {
+    background: #0c0c0c;
+    color: #888;
+  }
+  .wiki-nav-item.active {
+    color: #ccc;
+    background: #0d0d0d;
+    border-left-color: #c0392b;
+  }
+  .wiki-nav-icon {
+    font-size: 13px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .wiki-nav-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wiki-sidebar-divider {
+    height: 1px;
+    background: #121212;
+    margin: 12px 20px;
+  }
+
+  /* ── Main Content Area ── */
+  .wiki-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 40px 60px;
+    scrollbar-width: thin;
+    scrollbar-color: #1a1a1a transparent;
+  }
+  .wiki-main::-webkit-scrollbar { width: 6px; }
+  .wiki-main::-webkit-scrollbar-track { background: transparent; }
+  .wiki-main::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 3px; }
+
+  .about-content {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .about-section {
+    border: none;
+    border-bottom: 1px solid #111;
+    background: transparent;
+    padding: 28px 0;
+    border-radius: 0;
+    scroll-margin-top: 20px;
+  }
+  .about-section:first-child {
+    padding-top: 0;
+  }
+  .about-section:last-child {
+    border-bottom: none;
+  }
+  .about-section-title {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #151515;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .about-section-title .section-icon {
+    font-size: 16px;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .about-grid.three-col {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .about-card {
+    background: #0a0a0a;
+    border: 1px solid #151515;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .about-card:hover {
+    background: #0e0e0e;
+    border-color: #252525;
+    transform: translateY(-1px);
+  }
+  .about-card-name {
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+  .about-card-desc {
+    font-size: 10px;
+    color: #555;
+    line-height: 1.7;
+  }
+  .about-card-stat {
+    font-size: 10px;
+    color: #444;
+    line-height: 1.6;
+  }
+  .about-card-stat span {
+    color: #666;
+  }
+  .about-controls-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 16px;
+    font-size: 11px;
+  }
+  .about-key {
+    color: #888;
+    font-weight: bold;
+    text-align: right;
+    letter-spacing: 1px;
+  }
+  .about-action {
+    color: #555;
+  }
+  .about-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .about-card { align-items: center; text-align: center; }
+  .about-preview { display: block; margin: 0 auto 6px; }
+
+  /* ── Wiki paragraph / text styles ── */
+  .wiki-text {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.9;
+  }
+  .wiki-text strong, .wiki-text b { color: #999; }
+  .wiki-build-card {
+    background: #0a0a0a;
+    border: 1px solid #151515;
+    padding: 18px 22px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .wiki-build-card:hover { border-color: #252525; }
+  .wiki-build-name {
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #c0392b;
+    margin-bottom: 6px;
+  }
+  .wiki-build-desc {
+    font-size: 11px;
+    color: #555;
+    line-height: 1.7;
+  }
+  .wiki-faq-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #111;
+  }
+  .wiki-faq-item:last-child { border-bottom: none; }
+  .wiki-faq-q {
+    font-size: 12px;
+    font-weight: bold;
+    color: #888;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .wiki-faq-a {
+    font-size: 11px;
+    color: #555;
+    line-height: 1.7;
+  }
 </style>
 </head>
 <body>
@@ -403,11 +800,43 @@
   <div class="game-title">WASTELAND ZERO</div>
   <div class="game-subtitle">SURVIVE. KILL. EVOLVE.</div>
   <button class="btn" id="startBtn">ENTER THE WASTELAND</button>
+  <button class="btn secondary" id="menuShopBtn" style="margin-top:8px;width:280px;">🪙 SHOP</button>
+  <button class="btn secondary" id="aboutBtn" style="margin-top:8px;width:280px;">WIKI</button>
   <div class="controls-ref">
     <span>WASD</span> Move &nbsp;|&nbsp; <span>MOUSE</span> Aim &nbsp;|&nbsp; <span>LMB</span> Shoot &nbsp;|&nbsp; <span>R</span> Reload &nbsp;|&nbsp; <span>SPACE / SHIFT</span> Dash &nbsp;|&nbsp; <span>ESC / P</span> Pause<br/>
     Walk over weapons to pick them up &nbsp;|&nbsp; Kill enemies for XP and level up
   </div>
   <div class="version-tag" id="menuVersion"></div>
+</div>
+
+<!-- ═══ ABOUT / HOW TO PLAY SCREEN ═════════════════════ -->
+<div id="aboutScreen" class="screen hidden">
+  <!-- Header -->
+  <div class="wiki-header">
+    <div class="wiki-header-left">
+      <div class="wiki-header-title">WIKI</div>
+      <div class="wiki-header-divider"></div>
+      <div class="wiki-header-sub">Wasteland Zero Field Manual</div>
+    </div>
+    <div class="wiki-header-right">
+      <a href="https://github.com" id="wikiEditLink" target="_blank" class="wiki-header-link">EDIT ON GITHUB</a>
+      <button class="wiki-back-btn" id="aboutBackBtn">← BACK</button>
+    </div>
+  </div>
+  <!-- Body -->
+  <div class="wiki-body">
+    <!-- Sidebar -->
+    <div class="wiki-sidebar" id="wikiSidebar">
+      <div class="wiki-sidebar-label">NAVIGATION</div>
+      <!-- Dynamically populated -->
+    </div>
+    <!-- Main content -->
+    <div class="wiki-main">
+      <div class="about-content" id="aboutContent">
+        <!-- Dynamically populated from WIKI.md -->
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ PAUSE SCREEN ══════════════════════════════════ -->
@@ -429,9 +858,20 @@
   <button class="btn secondary" id="changelogBackBtn" style="margin-top:28px;width:200px;">← BACK</button>
 </div>
 
+<!-- ═══ DIFFICULTY SELECT ══════════════════════════ -->
+<div id="diffScreen" class="screen hidden">
+  <div class="section-title">STEP 1 OF 3</div>
+  <div class="section-heading">SELECT DIFFICULTY</div>
+  <div class="diff-grid" id="diffGrid"></div>
+  <div style="display:flex;gap:12px;margin-top:32px;">
+    <button class="btn secondary" id="diffBackBtn">← BACK</button>
+    <button class="btn" id="diffNextBtn">CHOOSE SURVIVOR →</button>
+  </div>
+</div>
+
 <!-- ═══ CHARACTER SELECT ═══════════════════════════ -->
 <div id="charScreen" class="screen hidden">
-  <div class="section-title">STEP 1 OF 2</div>
+  <div class="section-title">STEP 2 OF 3</div>
   <div class="section-heading">CHOOSE YOUR SURVIVOR</div>
   <div class="char-grid" id="charGrid"></div>
   <div style="display:flex;gap:12px;margin-top:32px;">
@@ -442,7 +882,7 @@
 
 <!-- ═══ WEAPON SELECT ══════════════════════════════ -->
 <div id="weaponScreen" class="screen hidden">
-  <div class="section-title">STEP 2 OF 2</div>
+  <div class="section-title">STEP 3 OF 3</div>
   <div class="section-heading">CHOOSE YOUR WEAPON</div>
   <div class="weapon-grid" id="weaponGrid"></div>
   <div style="display:flex;gap:12px;margin-top:32px;">
@@ -458,6 +898,16 @@
   <div class="cards-row" id="cardsRow"></div>
 </div>
 
+<!-- ═══ SHOP ════════════════════════════════════════ -->
+<div id="shopScreen" class="screen hidden">
+  <div class="levelup-title" style="color:#f1c40f;">SHOP</div>
+  <div class="levelup-sub" id="shopCoinsLabel">🪙 0 COINS</div>
+  <div class="shop-hint" style="font-size:10px;color:#555;letter-spacing:2px;margin-bottom:4px;">BONUSES APPLY TO YOUR NEXT RUN</div>
+  <div id="shopBonusHint" style="font-size:10px;color:#b8860b;letter-spacing:1px;margin-bottom:12px;min-height:14px;"></div>
+  <div class="cards-row" id="shopRow" style="flex-wrap:wrap;gap:14px;max-width:720px;justify-content:center;"></div>
+  <button class="btn secondary" id="shopSkipBtn" style="margin-top:22px;width:220px;">← BACK</button>
+</div>
+
 <!-- ═══ GAME OVER ═══════════════════════════════════ -->
 <div id="gameoverScreen" class="screen hidden">
   <div class="go-title">YOU DIED</div>
@@ -466,6 +916,7 @@
     <div class="go-stat"><div class="val" id="goScore">0</div><div class="label">Score</div></div>
     <div class="go-stat"><div class="val" id="goWave">1</div><div class="label">Wave</div></div>
     <div class="go-stat"><div class="val" id="goKills">0</div><div class="label">Kills</div></div>
+    <div class="go-stat"><div class="val" id="goCoins">0</div><div class="label">Coins Earned</div></div>
   </div>
   <div class="go-buttons">
     <button class="btn secondary" id="goMenuBtn">MAIN MENU</button>
@@ -479,19 +930,80 @@
 // =============================================================
 // CONSTANTS
 // =============================================================
-const CURRENT_VERSION = 'v1.4';
+const CURRENT_VERSION = 'v2.2';
 
 const CHANGELOG = [
   {
-    version: 'v1.4',
-    date: '2026-04-01',
-    title: 'Dash & Enemy Pathfinding Fix',
+    version: 'v2.2',
+    date: '2026-04-02',
+    title: 'Wiki Overhaul — Sidebar, New Sections & Full-Page Layout',
     notes: [
-      'New dash ability — press SPACE or SHIFT to dash in your movement direction',
-      'Dash grants brief invincibility and a speed burst (1.5s cooldown)',
-      'Dash cooldown shown as a bar on the HUD',
-      'Fixed large enemies (Brutes) getting stuck inside rocks',
-      'Enemies now steer around obstacles instead of stopping dead',
+      'Full-page wiki with sidebar navigation and scroll-spy highlighting',
+      'Fixed header bar with back button and GitHub edit link',
+      'New sections: Wave System, Shop & Economy, Build Strategies, Scoring & Progression, FAQ',
+      'Sidebar auto-highlights current section while scrolling',
+      'Click sidebar items to jump to any section',
+      'Expanded weapon, enemy, and survivor descriptions',
+      'Build strategy cards with recommended loadouts',
+      'FAQ section with common questions and answers',
+      'Bullet list parsing support in WIKI.md',
+      'Much more Tips & Tricks content',
+    ]
+  },
+  {
+    version: 'v2.1',
+    date: '2026-04-02',
+    title: 'Shop & Coin Economy',
+    notes: [
+      'Coin economy: every enemy kill awards coins (scales with wave and enemy type)',
+      'Elite enemies drop 3× coins',
+      'Random coin chests spawn in the world every ~40s with scaling value',
+      'Between-wave shop opens automatically — spend coins on upgrades',
+      'Shop items: Medkit, Full Heal, Armor Plating (+max HP), Damage Boost, Leg Servos (+speed), Energy Shield (absorb 1 hit), Ammo Supply',
+      'Item costs scale up with repeated purchases',
+      'Energy Shield adds a glowing visual ring around the player',
+      'Coin counter shown on HUD; total coins earned shown on game-over screen',
+    ]
+  },
+  {
+    version: 'v2.0',
+    date: '2026-04-01',
+    title: 'Community Wiki',
+    notes: [
+      'How to Play screen replaced with a community-editable WIKI',
+      'Wiki content is loaded from WIKI.md — editable on GitHub via pull request',
+      'New sections: Upgrades reference table and Tips',
+      'Text descriptions for weapons, enemies, and survivors sourced from WIKI.md',
+      'Canvas previews and stats still auto-generated from game data',
+      'Fallback to hardcoded content if WIKI.md fails to load',
+    ]
+  },
+  {
+    version: 'v1.9',
+    date: '2026-04-01',
+    title: 'Major Update — Difficulty, Wiki, Crawler & Balance',
+    notes: [
+      // Difficulty Selection
+      'New pre-game difficulty screen: Easy, Medium, Hard, Difficult, Extreme',
+      'Hard is the default (matches previous balance); difficulty affects all enemy/player stats',
+      'Game flow is now: Menu → Difficulty → Character → Weapon → Deploy',
+      // How to Play / Visual Wiki
+      'Full in-game visual wiki with canvas-rendered previews of enemies, weapons, and survivors',
+      'Wiki includes controls, gameplay tips, stats, and wave appearance info',
+      // New Enemy — Crawler
+      'New enemy type: Crawler — fast, low-profile centipede (size 7, speed 200, damage 8)',
+      'Detailed canvas sprite with animated legs, segmented carapace, and glowing amber eyes',
+      // Wave Rebalance & Drops
+      'Smooth spawn curve — gentler wave 1 (runners only), gradual ramp (+0.12/s per wave)',
+      'Enemy damage scales +10% per wave; player gains +5 max HP per wave (slower than enemies)',
+      'Health medkit drops (15% chance, heals 25) and ammo crate drops (20% chance) on enemy death',
+      'Elite enemies from wave 5+ (gold outline, 2× HP, 1.3× speed, 1.5× damage, 3× XP)',
+      'Elites always drop health + ammo; pickups fade out after 15 seconds',
+      'Wave announcement overlay ("WAVE X" text on wave transition)',
+      // Dash & Pathfinding
+      'Dash ability — SPACE or SHIFT for a speed burst with brief invincibility (1.5s cooldown)',
+      'Dash cooldown bar shown on HUD',
+      'Fixed Brutes getting stuck in rocks; enemies now steer around obstacles',
       'Enemies no longer spawn inside obstacles',
     ]
   },
@@ -555,6 +1067,52 @@ const DASH_SPEED_MULT = 3.5;
 const DASH_DURATION = 120;   // ms
 const DASH_COOLDOWN = 1500; // ms
 const DASH_INVINCIBLE = 200; // ms of invincibility after dash starts
+
+// =============================================================
+// DIFFICULTY DEFINITIONS
+// =============================================================
+const DIFFICULTIES = [
+  {
+    id: 'easy', name: 'EASY', color: '#3d9e5c',
+    desc: 'Relaxed. Great for learning the ropes.',
+    enemyHpMult: 0.6, enemyDmgMult: 0.5, enemySpeedMult: 0.85,
+    spawnRateMult: 0.6, playerHpMult: 1.5, dropRateMult: 1.5, xpMult: 1.2,
+    chestDropChance: 0.85, chestValueMult: 0.7,
+    mods: ['<span class="buff">−40% enemy HP</span>','<span class="buff">−50% enemy damage</span>','<span class="buff">+50% player HP</span>','<span class="buff">+50% drop rate</span>']
+  },
+  {
+    id: 'medium', name: 'MEDIUM', color: '#5baadd',
+    desc: 'A fair fight. Enemies hit softer.',
+    enemyHpMult: 0.8, enemyDmgMult: 0.75, enemySpeedMult: 0.92,
+    spawnRateMult: 0.8, playerHpMult: 1.25, dropRateMult: 1.25, xpMult: 1.1,
+    chestDropChance: 0.70, chestValueMult: 1.0,
+    mods: ['<span class="buff">−20% enemy HP</span>','<span class="buff">−25% enemy damage</span>','<span class="buff">+25% player HP</span>','<span class="buff">+25% drops</span>']
+  },
+  {
+    id: 'hard', name: 'HARD', color: '#c87a3a', isDefault: true,
+    desc: 'The standard wasteland experience.',
+    enemyHpMult: 1, enemyDmgMult: 1, enemySpeedMult: 1,
+    spawnRateMult: 1, playerHpMult: 1, dropRateMult: 1, xpMult: 1,
+    chestDropChance: 0.55, chestValueMult: 1.4,
+    mods: ['<span class="neutral">Baseline stats</span>','<span class="neutral">No modifiers</span>']
+  },
+  {
+    id: 'difficult', name: 'DIFFICULT', color: '#c0392b',
+    desc: 'Punishing. Every mistake costs.',
+    enemyHpMult: 1.3, enemyDmgMult: 1.3, enemySpeedMult: 1.1,
+    spawnRateMult: 1.3, playerHpMult: 0.85, dropRateMult: 0.7, xpMult: 0.9,
+    chestDropChance: 0.35, chestValueMult: 2.0,
+    mods: ['<span class="nerf">+30% enemy HP</span>','<span class="nerf">+30% enemy damage</span>','<span class="nerf">−15% player HP</span>','<span class="nerf">−30% drops</span>']
+  },
+  {
+    id: 'extreme', name: 'EXTREME', color: '#9b59b6',
+    desc: 'Near impossible. Only for the best.',
+    enemyHpMult: 1.7, enemyDmgMult: 1.6, enemySpeedMult: 1.2,
+    spawnRateMult: 1.6, playerHpMult: 0.7, dropRateMult: 0.5, xpMult: 0.8,
+    chestDropChance: 0.20, chestValueMult: 3.5,
+    mods: ['<span class="nerf">+70% enemy HP</span>','<span class="nerf">+60% enemy damage</span>','<span class="nerf">−30% player HP</span>','<span class="nerf">−50% drops</span>']
+  },
+];
 
 // =============================================================
 // CHARACTER DEFINITIONS
@@ -663,11 +1221,25 @@ const UPGRADES = [
   { id:'ammo',      icon:'📦', name:'AMMO CACHE',   desc:'+50 reserve ammo, full reload' },
 ];
 
+// Shop items — pre-run bonuses bought from the main menu
+// desc2 = tooltip shown in menu; bonus is applied at run start then consumed
+const SHOP_ITEMS = [
+  { id:'heal25',    icon:'💊', name:'MEDKIT',        desc:'Start with +25 HP this run',           baseCost:20,  costScale:5  },
+  { id:'fullheal',  icon:'❤️‍🩹', name:'FULL HEAL',     desc:'Deploy at full HP this run',           baseCost:35,  costScale:8  },
+  { id:'maxhp',     icon:'🛡️', name:'ARMOR PLATING', desc:'Start with +25 max HP this run',       baseCost:50,  costScale:15 },
+  { id:'damage',    icon:'💥', name:'DAMAGE BOOST',  desc:'+15% weapon damage this run',          baseCost:60,  costScale:20 },
+  { id:'speed',     icon:'⚡', name:'LEG SERVOS',    desc:'+20 movement speed this run',          baseCost:40,  costScale:12 },
+  { id:'shield',    icon:'🔰', name:'ENERGY SHIELD', desc:'Deploy with a shield (absorb 1 hit)',   baseCost:70,  costScale:20 },
+  { id:'ammorefill',icon:'🔋', name:'AMMO SUPPLY',   desc:'Start fully loaded + 50% extra ammo',  baseCost:25,  costScale:5  },
+  { id:'regen',     icon:'🩸', name:'STIM PACK',      desc:'Gain HP regeneration this run',        baseCost:55,  costScale:18 },
+];
+
 // =============================================================
 // ENEMY TYPES
 // =============================================================
 const ENEMY_TYPES = {
   runner:  { color:'#c0392b', size:10, hp:40,  speed:170, damage:10, xp:20, ranged:false },
+  crawler: { color:'#6b3a2a', size:7,  hp:30,  speed:200, damage:8,  xp:25, ranged:false },
   brute:   { color:'#e67e22', size:18, hp:200, speed:70,  damage:40, xp:60, ranged:false },
   spitter: { color:'#27ae60', size:13, hp:80,  speed:100, damage:0,  xp:40, ranged:true, fireInterval:2000, projSpeed:280, projDamage:15 },
 };
@@ -680,12 +1252,22 @@ let canvas, ctx;
 let keys = {};
 let mouse = { x:0, y:0, down:false };
 let lastTime = 0;
-let gameState = 'menu'; // menu | charselect | weaponselect | playing | levelup | gameover | paused
+let gameState = 'menu'; // menu | diffselect | charselect | weaponselect | playing | levelup | shop | gameover | paused
 let hudPauseBtn = null; // { x, y, w, h } — updated each draw frame for click detection
 
 // Current selections
+let selectedDiffId = 'hard';
 let selectedCharId = 'ghost';
 let selectedWeaponKey = 'pistol';
+
+// Persistent economy (survives across runs, backed by localStorage)
+let persistentCoins = parseInt(localStorage.getItem('wz_coins') || '0');
+let shopBuys = JSON.parse(localStorage.getItem('wz_shopbuys') || '{}');
+// Pre-run bonuses queued in the shop — consumed when a run starts
+let startingBonuses = { extraMaxHp:0, damageBonusMult:1, extraSpeed:0, shield:false, ammoRefill:false, fullHeal:false, hpRegen:0, extraStartHp:0 };
+
+function saveCoins() { localStorage.setItem('wz_coins', persistentCoins); }
+function saveShopBuys() { localStorage.setItem('wz_shopbuys', JSON.stringify(shopBuys)); }
 
 // =============================================================
 // DRAW CHARACTER PREVIEW (on a <canvas> element)
@@ -861,6 +1443,514 @@ function drawWeaponPreview(cvs, weaponKey) {
 }
 
 // =============================================================
+// BUILD ABOUT / HOW TO PLAY SCREEN
+// =============================================================
+const ENEMY_INFO = {
+  runner:  { name:'RUNNER',  desc:'Gaunt ghoul that sprints at you with claws. Fast but fragile.', wave:'Wave 1+' },
+  crawler: { name:'CRAWLER', desc:'Tiny centipede — fastest enemy, very small hitbox. Hard to hit.', wave:'Wave 2+' },
+  brute:   { name:'BRUTE',   desc:'Armored hulk. Slow but extremely tanky with devastating melee.', wave:'Wave 2+' },
+  spitter: { name:'SPITTER', desc:'Bloated frog mutant. Keeps distance and fires acid projectiles.', wave:'Wave 3+' },
+};
+
+function drawEnemyPreview(cvs, enemyType) {
+  const c = cvs.getContext('2d');
+  const W = cvs.width, H = cvs.height;
+  c.clearRect(0, 0, W, H);
+
+  // Temporarily hijack the global ctx
+  const prevCtx = ctx;
+  ctx = c;
+
+  c.save();
+  c.translate(W / 2, H / 2);
+
+  // Scale to fit nicely
+  const et = ENEMY_TYPES[enemyType];
+  const scale = (et.size <= 10 ? 2.5 : et.size <= 13 ? 2 : 1.6);
+  c.scale(scale, scale);
+
+  const t = performance.now();
+  if (enemyType === 'runner')       drawRunner(t);
+  else if (enemyType === 'crawler') drawCrawler(t);
+  else if (enemyType === 'brute')   drawBrute(t);
+  else if (enemyType === 'spitter') drawSpitter(t);
+
+  c.restore();
+  ctx = prevCtx;
+}
+
+// =============================================================
+// WIKI MARKDOWN PARSER & BUILDER
+// =============================================================
+const SECTION_COLORS = {
+  'CONTROLS':    '#c0392b',
+  'GAMEPLAY':    '#f1c40f',
+  'WASTELAND':   '#8b6914',
+  'WAVE':        '#e67e22',
+  'WEAPONS':     '#5baadd',
+  'WEAPON TACT': '#5baadd',
+  'ENEMIES':     '#e74c3c',
+  'ENEMY BEHAV': '#e74c3c',
+  'SURVIVORS':   '#1abccc',
+  'SURVIVOR COM':'#1abccc',
+  'UPGRADES':    '#a060cc',
+  'UPGRADE DEEP':'#a060cc',
+  'SHOP':        '#f39c12',
+  'ECONOMY':     '#f39c12',
+  'BUILD':       '#e74c3c',
+  'STRATEG':     '#e74c3c',
+  'SCORING':     '#3498db',
+  'PROGRESSION': '#3498db',
+  'DIFFICULTY':  '#d35400',
+  'COMBAT':      '#c0392b',
+  'DASH':        '#2ecc71',
+  'MATH':        '#9b59b6',
+  'FORMULA':     '#9b59b6',
+  'GAME FLOW':   '#3498db',
+  'PICKUPS':     '#f1c40f',
+  'DROPS':       '#f1c40f',
+  'ENERGY SHIELD':'#2ecc71',
+  'ELITE':       '#f39c12',
+  'TIPS':        '#27ae60',
+  'TRICKS':      '#27ae60',
+  'CHALLENGE':   '#e74c3c',
+  'VERSION':     '#7f8c8d',
+  'HISTORY':     '#7f8c8d',
+  'FAQ':         '#95a5a6',
+};
+
+function getSectionColor(title) {
+  const upper = title.toUpperCase();
+  for (const [key, color] of Object.entries(SECTION_COLORS)) {
+    if (upper.includes(key)) return color;
+  }
+  return '#888';
+}
+
+// Lightweight markdown → HTML (text only, no XSS risk — we control the source)
+function mdInline(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<span style="color:#ccc;font-weight:bold">$1</span>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+function parseWikiMarkdown(md) {
+  const sections = [];
+  const lines = md.split('\n');
+  let current = null;
+
+  for (const line of lines) {
+    if (line.startsWith('## ')) {
+      if (current) sections.push(current);
+      current = { title: line.replace('## ', '').trim(), items: [], paragraphs: [], table: null };
+    } else if (current) {
+      if (line.startsWith('### ')) {
+        current.items.push({ name: line.replace('### ', '').trim(), desc: '' });
+      } else if (line.startsWith('- ')) {
+        // Bullet list item — treat as paragraph
+        current.paragraphs.push(line.replace(/^- /, '').trim());
+      } else if (line.startsWith('| ') && !line.match(/^\|\s*-/)) {
+        // Table row
+        const cells = line.split('|').map(c => c.trim()).filter(Boolean);
+        if (!current.table) current.table = [];
+        current.table.push(cells);
+      } else if (line.startsWith('>')) {
+        // blockquote — skip (notes)
+      } else if (line.trim() && current.items.length > 0 && !line.startsWith('---') && !line.startsWith('#')) {
+        // Append to last item's description
+        const last = current.items[current.items.length - 1];
+        last.desc += (last.desc ? ' ' : '') + line.trim();
+      } else if (line.trim() && !line.startsWith('---') && !line.startsWith('#') && !line.startsWith('*Want')) {
+        current.paragraphs.push(line.trim());
+      }
+    }
+  }
+  if (current) sections.push(current);
+  return sections;
+}
+
+let wikiCache = null;
+
+async function fetchWiki() {
+  if (wikiCache) return wikiCache;
+  try {
+    const resp = await fetch('./WIKI.md');
+    if (!resp.ok) throw new Error('fetch failed');
+    wikiCache = await resp.text();
+    return wikiCache;
+  } catch (e) {
+    console.warn('WIKI.md fetch failed, using fallback');
+    return null;
+  }
+}
+
+function buildAboutScreen() {
+  const container = document.getElementById('aboutContent');
+  const sidebar = document.getElementById('wikiSidebar');
+  container.innerHTML = '<div style="color:#333;font-size:11px;letter-spacing:2px;padding:40px 0;">LOADING WIKI...</div>';
+  sidebar.innerHTML = '<div class="wiki-sidebar-label">NAVIGATION</div>';
+
+  fetchWiki().then(md => {
+    container.innerHTML = '';
+    sidebar.innerHTML = '<div class="wiki-sidebar-label">NAVIGATION</div>';
+    const sections = md ? parseWikiMarkdown(md) : [];
+
+    // Extract emoji from section title
+    function extractIcon(title) {
+      const match = title.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F?)/u);
+      return match ? match[0] : '•';
+    }
+    function cleanTitle(title) {
+      return title.replace(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F?)\s*/u, '').trim();
+    }
+
+    // Build sidebar nav
+    sections.forEach((section, idx) => {
+      const icon = extractIcon(section.title);
+      const clean = cleanTitle(section.title);
+      const color = getSectionColor(section.title);
+      const navItem = document.createElement('div');
+      navItem.className = 'wiki-nav-item' + (idx === 0 ? ' active' : '');
+      navItem.dataset.sectionIdx = idx;
+      navItem.innerHTML = `<span class="wiki-nav-icon">${icon}</span><span class="wiki-nav-text">${clean}</span>`;
+      navItem.style.setProperty('--nav-color', color);
+      navItem.addEventListener('click', () => {
+        // Scroll to section
+        const target = container.querySelector(`[data-section-id="sec-${idx}"]`);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // Highlight active
+        sidebar.querySelectorAll('.wiki-nav-item').forEach(n => n.classList.remove('active'));
+        navItem.classList.add('active');
+      });
+      sidebar.appendChild(navItem);
+
+      // Add divider after first 2 (controls, gameplay) and before tips/faq
+      if (idx === 1 || clean.toUpperCase() === 'TIPS & TRICKS' || clean.toUpperCase() === 'FAQ') {
+        // Already appended navItem, no need for divider logic mid-stream
+      }
+    });
+
+    // Build main content sections
+    for (let idx = 0; idx < sections.length; idx++) {
+      const section = sections[idx];
+      const titleUpper = section.title.toUpperCase();
+      const color = getSectionColor(section.title);
+      const icon = extractIcon(section.title);
+      const clean = cleanTitle(section.title);
+      const sec = document.createElement('div');
+      sec.className = 'about-section';
+      sec.dataset.sectionId = `sec-${idx}`;
+
+      const titleEl = document.createElement('div');
+      titleEl.className = 'about-section-title';
+      titleEl.style.color = color;
+      titleEl.innerHTML = `<span class="section-icon">${icon}</span> ${clean}`;
+      sec.appendChild(titleEl);
+
+      // ── CONTROLS table ──
+      if (titleUpper.includes('CONTROLS') && section.table) {
+        const grid = document.createElement('div');
+        grid.className = 'about-controls-grid';
+        section.table.slice(1).forEach(row => {
+          const keyEl = document.createElement('div');
+          keyEl.className = 'about-key';
+          keyEl.textContent = row[0] || '';
+          const actEl = document.createElement('div');
+          actEl.className = 'about-action';
+          actEl.textContent = row[1] || '';
+          grid.append(keyEl, actEl);
+        });
+        sec.appendChild(grid);
+      }
+
+      // ── GAMEPLAY / WAVE SYSTEM paragraphs ──
+      else if (titleUpper.includes('GAMEPLAY') || titleUpper.includes('WAVE')) {
+        const p = document.createElement('div');
+        p.className = 'wiki-text';
+        p.innerHTML = section.paragraphs.map(mdInline).join('<br/><br/>');
+        sec.appendChild(p);
+      }
+
+      // ── WEAPONS ──
+      else if (titleUpper.includes('WEAPONS')) {
+        const grid = document.createElement('div');
+        grid.className = 'about-grid three-col';
+        const wikiDescs = {};
+        section.items.forEach(item => { wikiDescs[item.name.toUpperCase()] = item.desc; });
+        Object.keys(WEAPONS).forEach(key => {
+          const wep = WEAPONS[key];
+          const info = WEAPON_INFO[key];
+          const card = document.createElement('div');
+          card.className = 'about-card';
+          const cvs = document.createElement('canvas');
+          cvs.width = 140; cvs.height = 60;
+          cvs.className = 'about-preview';
+          const nameEl = document.createElement('div');
+          nameEl.className = 'about-card-name';
+          nameEl.style.color = wep.color;
+          nameEl.textContent = wep.name;
+          const descEl = document.createElement('div');
+          descEl.className = 'about-card-desc';
+          descEl.textContent = wikiDescs[wep.name] || info.desc;
+          const statsEl = document.createElement('div');
+          statsEl.className = 'about-card-stat';
+          statsEl.innerHTML = Object.entries(info.stats).map(([k,v]) => `<span>${k}</span> ${v}`).join(' · ');
+          card.append(cvs, nameEl, descEl, statsEl);
+          grid.appendChild(card);
+          drawWeaponPreview(cvs, key);
+        });
+        sec.appendChild(grid);
+      }
+
+      // ── ENEMIES ──
+      else if (titleUpper.includes('ENEMIES')) {
+        const grid = document.createElement('div');
+        grid.className = 'about-grid';
+        const wikiDescs = {};
+        section.items.forEach(item => { wikiDescs[item.name.toUpperCase()] = item.desc; });
+        Object.keys(ENEMY_TYPES).forEach(key => {
+          const et = ENEMY_TYPES[key];
+          const info = ENEMY_INFO[key];
+          const card = document.createElement('div');
+          card.className = 'about-card';
+          const cvs = document.createElement('canvas');
+          cvs.width = 80; cvs.height = 80;
+          cvs.className = 'about-preview';
+          const nameEl = document.createElement('div');
+          nameEl.className = 'about-card-name';
+          nameEl.style.color = et.color;
+          nameEl.textContent = info.name;
+          const descEl = document.createElement('div');
+          descEl.className = 'about-card-desc';
+          descEl.textContent = wikiDescs[info.name] || info.desc;
+          const statsEl = document.createElement('div');
+          statsEl.className = 'about-card-stat';
+          const dmgText = et.ranged ? `PROJ DMG ${et.projDamage}` : `DMG ${et.damage}`;
+          statsEl.innerHTML = `<span>HP</span> ${et.hp} · <span>SPD</span> ${et.speed} · <span>${dmgText.split(' ').slice(0,-1).join(' ')}</span> ${dmgText.split(' ').pop()} · <span>XP</span> ${et.xp}<br/><span>APPEARS</span> ${info.wave}`;
+          card.append(cvs, nameEl, descEl, statsEl);
+          grid.appendChild(card);
+          drawEnemyPreview(cvs, key);
+        });
+        sec.appendChild(grid);
+        const eliteText = section.paragraphs.find(p => p.toUpperCase().includes('ELITE'));
+        if (eliteText) {
+          const eliteDiv = document.createElement('div');
+          eliteDiv.style.cssText = 'font-size:10px;color:#555;margin-top:12px;line-height:1.7;padding:10px 14px;background:#0a0a0a;border:1px solid #151515;border-radius:3px;';
+          eliteDiv.innerHTML = '⭐ ' + mdInline(eliteText);
+          sec.appendChild(eliteDiv);
+        }
+      }
+
+      // ── SURVIVORS ──
+      else if (titleUpper.includes('SURVIVORS')) {
+        const grid = document.createElement('div');
+        grid.className = 'about-grid three-col';
+        const wikiDescs = {};
+        section.items.forEach(item => { wikiDescs[item.name.toUpperCase()] = item.desc; });
+        CHARACTERS.forEach(char => {
+          const card = document.createElement('div');
+          card.className = 'about-card';
+          const cvs = document.createElement('canvas');
+          cvs.width = 80; cvs.height = 80;
+          cvs.className = 'about-preview';
+          const nameEl = document.createElement('div');
+          nameEl.className = 'about-card-name';
+          nameEl.style.color = char.color;
+          nameEl.textContent = char.name;
+          const descEl = document.createElement('div');
+          descEl.className = 'about-card-desc';
+          descEl.textContent = wikiDescs[char.name] || char.trait;
+          const bonusEl = document.createElement('div');
+          bonusEl.className = 'about-card-stat';
+          bonusEl.style.color = char.bonusColor;
+          bonusEl.textContent = char.bonusText || 'No special bonus';
+          card.append(cvs, nameEl, descEl, bonusEl);
+          grid.appendChild(card);
+          drawCharPreview(cvs, char);
+        });
+        sec.appendChild(grid);
+      }
+
+      // ── UPGRADES table ──
+      else if (titleUpper.includes('UPGRADES') && section.table) {
+        const grid = document.createElement('div');
+        grid.className = 'about-grid';
+        section.table.slice(1).forEach(row => {
+          const card = document.createElement('div');
+          card.className = 'about-card';
+          card.style.flexDirection = 'row';
+          card.style.gap = '12px';
+          card.style.alignItems = 'flex-start';
+          card.style.textAlign = 'left';
+          const nameEl = document.createElement('div');
+          nameEl.className = 'about-card-name';
+          nameEl.style.color = '#a060cc';
+          nameEl.style.whiteSpace = 'nowrap';
+          nameEl.textContent = row[0] || '';
+          const descEl = document.createElement('div');
+          descEl.className = 'about-card-desc';
+          descEl.textContent = row[1] || '';
+          card.append(nameEl, descEl);
+          grid.appendChild(card);
+        });
+        sec.appendChild(grid);
+      }
+
+      // ── BUILD STRATEGIES ──
+      else if (titleUpper.includes('BUILD') || titleUpper.includes('STRATEG')) {
+        section.items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'wiki-build-card';
+          const nameEl = document.createElement('div');
+          nameEl.className = 'wiki-build-name';
+          nameEl.textContent = item.name;
+          const descEl = document.createElement('div');
+          descEl.className = 'wiki-build-desc';
+          descEl.innerHTML = mdInline(item.desc);
+          card.append(nameEl, descEl);
+          sec.appendChild(card);
+        });
+      }
+
+      // ── FAQ ──
+      else if (titleUpper.includes('FAQ')) {
+        // Parse Q&A pairs from paragraphs
+        let currentQ = null;
+        section.paragraphs.forEach(para => {
+          if (para.startsWith('**Q:') || para.startsWith('Q:')) {
+            if (currentQ) {
+              sec.appendChild(currentQ);
+            }
+            currentQ = document.createElement('div');
+            currentQ.className = 'wiki-faq-item';
+            const qEl = document.createElement('div');
+            qEl.className = 'wiki-faq-q';
+            qEl.innerHTML = mdInline(para);
+            currentQ.appendChild(qEl);
+          } else if (para.startsWith('**A:') || para.startsWith('A:')) {
+            if (currentQ) {
+              const aEl = document.createElement('div');
+              aEl.className = 'wiki-faq-a';
+              aEl.innerHTML = mdInline(para);
+              currentQ.appendChild(aEl);
+            }
+          }
+        });
+        if (currentQ) sec.appendChild(currentQ);
+      }
+
+      // ── SHOP & ECONOMY / SCORING / generic text ──
+      else if (section.paragraphs.length > 0 || section.items.length > 0 || section.table) {
+        // Render table if present (generic table for Difficulty, Survivor Comparison, etc.)
+        if (section.table && section.table.length > 1) {
+          const tableWrap = document.createElement('div');
+          tableWrap.style.cssText = 'overflow-x:auto;margin-bottom:16px;';
+          const tbl = document.createElement('table');
+          tbl.style.cssText = 'width:100%;border-collapse:collapse;font-size:11px;';
+          const thead = document.createElement('thead');
+          const headRow = document.createElement('tr');
+          section.table[0].forEach(cell => {
+            const th = document.createElement('th');
+            th.style.cssText = 'text-align:left;padding:8px 12px;border-bottom:1px solid #1a1a1a;color:#777;letter-spacing:1px;font-size:10px;white-space:nowrap;';
+            th.textContent = cell;
+            headRow.appendChild(th);
+          });
+          thead.appendChild(headRow);
+          tbl.appendChild(thead);
+          const tbody = document.createElement('tbody');
+          section.table.slice(1).forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach((cell, ci) => {
+              const td = document.createElement('td');
+              td.style.cssText = 'padding:7px 12px;border-bottom:1px solid #0f0f0f;color:' + (ci === 0 ? '#999' : '#555') + ';white-space:nowrap;';
+              td.innerHTML = mdInline(cell);
+              tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+          });
+          tbl.appendChild(tbody);
+          tableWrap.appendChild(tbl);
+          sec.appendChild(tableWrap);
+        }
+        // Render paragraphs and items
+        if (section.paragraphs.length > 0 || section.items.length > 0) {
+          const p = document.createElement('div');
+          p.className = 'wiki-text';
+          const lines = [];
+          section.paragraphs.forEach(para => lines.push(mdInline(para)));
+          section.items.forEach(item => lines.push(mdInline('**' + item.name + '** — ' + item.desc)));
+          p.innerHTML = lines.join('<br/><br/>');
+          sec.appendChild(p);
+        }
+      }
+
+      container.appendChild(sec);
+    }
+
+    // If fetch failed or empty, build hardcoded fallback
+    if (container.children.length === 0) {
+      buildAboutScreenFallback(container);
+    }
+
+    // Set up scroll-spy for sidebar highlighting
+    const mainScroll = container.closest('.wiki-main');
+    if (mainScroll) {
+      mainScroll.addEventListener('scroll', () => {
+        const sectionEls = container.querySelectorAll('.about-section');
+        let activeIdx = 0;
+        sectionEls.forEach((el, i) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.4) activeIdx = i;
+        });
+        sidebar.querySelectorAll('.wiki-nav-item').forEach((nav, i) => {
+          nav.classList.toggle('active', i === activeIdx);
+        });
+      });
+    }
+  });
+}
+
+function buildAboutScreenFallback(container) {
+  container.innerHTML = `
+    <div class="about-section">
+      <div class="about-section-title" style="color:#c0392b;">⌨ CONTROLS</div>
+      <div class="about-controls-grid">
+        <div class="about-key">WASD / ARROWS</div><div class="about-action">Move your character</div>
+        <div class="about-key">MOUSE</div><div class="about-action">Aim</div>
+        <div class="about-key">LEFT CLICK</div><div class="about-action">Shoot</div>
+        <div class="about-key">R</div><div class="about-action">Reload</div>
+        <div class="about-key">SPACE / SHIFT</div><div class="about-action">Dash</div>
+        <div class="about-key">ESC / P</div><div class="about-action">Pause</div>
+      </div>
+    </div>
+    <div class="about-section">
+      <div class="about-section-title" style="color:#f1c40f;">☠ GAMEPLAY</div>
+      <div style="font-size:11px;color:#666;line-height:1.8;">
+        Survive waves of enemies. Collect XP to level up. Pick up weapons and drops.
+      </div>
+    </div>
+  `;
+  // Still render weapon / enemy / character cards from game data
+  const weapSec = document.createElement('div');
+  weapSec.className = 'about-section';
+  weapSec.innerHTML = '<div class="about-section-title" style="color:#5baadd;">🔫 WEAPONS</div>';
+  const wGrid = document.createElement('div');
+  wGrid.className = 'about-grid three-col';
+  Object.keys(WEAPONS).forEach(key => {
+    const wep = WEAPONS[key]; const info = WEAPON_INFO[key];
+    const card = document.createElement('div'); card.className = 'about-card';
+    const cvs = document.createElement('canvas'); cvs.width = 140; cvs.height = 60; cvs.className = 'about-preview';
+    const n = document.createElement('div'); n.className = 'about-card-name'; n.style.color = wep.color; n.textContent = wep.name;
+    const d = document.createElement('div'); d.className = 'about-card-desc'; d.textContent = info.desc;
+    card.append(cvs, n, d); wGrid.appendChild(card); drawWeaponPreview(cvs, key);
+  });
+  weapSec.appendChild(wGrid);
+  container.appendChild(weapSec);
+}
+
+// =============================================================
 // BUILD CHARACTER SELECT SCREEN
 // =============================================================
 function buildCharScreen() {
@@ -947,23 +2037,92 @@ function buildWeaponScreen() {
 }
 
 // =============================================================
+// BUILD DIFFICULTY SELECT SCREEN
+// =============================================================
+function buildDifficultyScreen() {
+  const grid = document.getElementById('diffGrid');
+  grid.innerHTML = '';
+  DIFFICULTIES.forEach(diff => {
+    const card = document.createElement('div');
+    card.className = 'diff-card' + (diff.id === selectedDiffId ? ' selected' : '');
+    card.dataset.id = diff.id;
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'diff-name';
+    nameEl.style.color = diff.color;
+    nameEl.textContent = diff.name;
+
+    const descEl = document.createElement('div');
+    descEl.className = 'diff-desc';
+    descEl.textContent = diff.desc;
+
+    const modsEl = document.createElement('div');
+    modsEl.className = 'diff-mods';
+    modsEl.innerHTML = diff.mods.join('<br/>');
+
+    card.append(nameEl, descEl, modsEl);
+
+    if (diff.isDefault) {
+      const tag = document.createElement('div');
+      tag.className = 'diff-default-tag';
+      tag.textContent = 'DEFAULT';
+      card.appendChild(tag);
+    }
+
+    grid.appendChild(card);
+
+    card.addEventListener('click', () => {
+      selectedDiffId = diff.id;
+      grid.querySelectorAll('.diff-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    });
+  });
+}
+
+// =============================================================
 // SCREEN NAVIGATION
 // =============================================================
 function showScreen(id) {
-  ['menuScreen','charScreen','weaponScreen','levelupScreen','gameoverScreen'].forEach(s => {
+  ['menuScreen','diffScreen','charScreen','weaponScreen','levelupScreen','shopScreen','gameoverScreen'].forEach(s => {
     document.getElementById(s).classList.toggle('hidden', s !== id);
   });
 }
 
 document.getElementById('startBtn').addEventListener('click', () => {
+  buildDifficultyScreen();
+  showScreen('diffScreen');
+  gameState = 'diffselect';
+});
+
+document.getElementById('menuShopBtn').addEventListener('click', () => {
+  showShop();
+  // shopScreen shown; closeShop returns to menu
+});
+
+document.getElementById('aboutBtn').addEventListener('click', () => {
+  buildAboutScreen();
+  document.getElementById('aboutScreen').classList.remove('hidden');
+});
+
+document.getElementById('aboutBackBtn').addEventListener('click', () => {
+  document.getElementById('aboutScreen').classList.add('hidden');
+});
+
+document.getElementById('diffBackBtn').addEventListener('click', () => {
+  showScreen('menuScreen');
+  gameState = 'menu';
+});
+
+document.getElementById('diffNextBtn').addEventListener('click', () => {
   buildCharScreen();
   showScreen('charScreen');
   gameState = 'charselect';
 });
 
 document.getElementById('charBackBtn').addEventListener('click', () => {
-  showScreen('menuScreen');
-  gameState = 'menu';
+  buildDifficultyScreen();
+  showScreen('diffScreen');
+  gameState = 'diffselect';
 });
 
 document.getElementById('charNextBtn').addEventListener('click', () => {
@@ -983,14 +2142,18 @@ document.getElementById('deployBtn').addEventListener('click', () => {
 });
 
 document.getElementById('restartBtn').addEventListener('click', () => {
-  buildCharScreen();
-  showScreen('charScreen');
-  gameState = 'charselect';
+  buildDifficultyScreen();
+  showScreen('diffScreen');
+  gameState = 'diffselect';
 });
 
 document.getElementById('goMenuBtn').addEventListener('click', () => {
   showScreen('menuScreen');
   gameState = 'menu';
+});
+
+document.getElementById('shopSkipBtn').addEventListener('click', () => {
+  closeShop();
 });
 
 // =============================================================
@@ -1092,27 +2255,33 @@ function generateTiles() {
 function initState() {
   const char = CHARACTERS.find(c => c.id === selectedCharId) || CHARACTERS[0];
   const gun = { ...WEAPONS[selectedWeaponKey] };
+  const diff = DIFFICULTIES.find(d => d.id === selectedDiffId) || DIFFICULTIES[2];
 
   // Apply character bonus
-  let speed = PLAYER_SPEED_BASE;
-  let maxHp = PLAYER_MAX_HP;
-  let damageMult = 1;
+  let speed = PLAYER_SPEED_BASE + startingBonuses.extraSpeed;
+  let maxHp = Math.floor(PLAYER_MAX_HP * diff.playerHpMult) + startingBonuses.extraMaxHp;
+  let damageMult = 1 * startingBonuses.damageBonusMult;
   let fireRateMult = 1;
   let reloadTimeMult = 1;
 
   switch (char.bonus) {
     case 'speed':   speed += 40; break;
     case 'maxhp':   maxHp += 50; break;
-    case 'damage':  damageMult = 1.3; break;
+    case 'damage':  damageMult *= 1.3; break;
     case 'firerate': fireRateMult = 0.75; break;
     case 'reload':  reloadTimeMult = 0.6; break;
   }
 
+  let startHp = maxHp + startingBonuses.extraStartHp;
+  if (startingBonuses.fullHeal || startingBonuses.extraStartHp === 0) startHp = maxHp;
+  startHp = Math.min(startHp, maxHp);
+
   state = {
+    difficulty: diff,
     player: {
       x: WORLD_W/2, y: WORLD_H/2,
       angle: 0,
-      hp: maxHp, maxHp,
+      hp: startHp, maxHp,
       speed,
       weapon: gun,
       weaponKey: selectedWeaponKey,
@@ -1131,8 +2300,9 @@ function initState() {
       damageMult,
       piercing: false,
       extraPellets: 0,
-      hpRegen: 0,
+      hpRegen: startingBonuses.hpRegen,
       fireRateMult,
+      shield: startingBonuses.shield,
     },
     cam: { x:0, y:0 },
     bullets: [],
@@ -1145,13 +2315,27 @@ function initState() {
     score: 0, kills: 0,
     xp: 0, xpToNext: 100, level: 1,
     wave: 1, waveTimer: 0,
-    spawnTimer: 0, spawnInterval: 2500, spawnCount: 2,
+    spawnRate: 0.3 * diff.spawnRateMult, spawnAccum: 0,
+    pickups: [],
+    coinChests: [],
+    coinsThisRun: 0,
+    waveAnnounce: { timer: 0, wave: 0 },
     weaponPickupTimer: 0,
+    coinChestTimer: 0,
     lastFire: 0,
     shootHeld: false,
     obstacles: generateObstacles(),
     tiles: generateTiles(),
   };
+
+  // Apply ammo refill bonus
+  if (startingBonuses.ammoRefill) {
+    state.player.weapon.ammo = state.player.weapon.maxAmmo;
+    state.player.weapon.reserveAmmo += Math.ceil(state.player.weapon.maxAmmo * 0.5);
+  }
+
+  // Consume all starting bonuses
+  startingBonuses = { extraMaxHp:0, damageBonusMult:1, extraSpeed:0, shield:false, ammoRefill:false, fullHeal:false, hpRegen:0, extraStartHp:0 };
 }
 
 // =============================================================
@@ -1175,7 +2359,7 @@ function setupInput() {
     if (e.code === 'KeyR' && gameState === 'playing') startReload();
     if ((e.code === 'Space' || e.code === 'ShiftLeft' || e.code === 'ShiftRight') && gameState === 'playing') startDash();
     if ((e.code === 'Escape' || e.code === 'KeyP') && gameState === 'playing') { openPause(); e.preventDefault(); }
-    if ((e.code === 'Escape' || e.code === 'KeyP') && gameState === 'paused') {
+    else if ((e.code === 'Escape' || e.code === 'KeyP') && gameState === 'paused') {
       // If changelog is open, close just that; otherwise close pause
       const cl = document.getElementById('changelogScreen');
       if (!cl.classList.contains('hidden')) { cl.classList.add('hidden'); }
@@ -1301,15 +2485,19 @@ function update(dt, ts) {
   if (state.waveTimer >= 30000) {
     state.waveTimer = 0;
     state.wave++;
-    state.spawnInterval = Math.max(800, state.spawnInterval - 200);
-    state.spawnCount = Math.min(8, state.spawnCount + 1);
+    state.spawnRate = Math.min(3.5 * state.difficulty.spawnRateMult, state.spawnRate + 0.12 * state.difficulty.spawnRateMult);
+    // Player HP scaling: +5 max HP per wave (slower than enemy damage growth)
+    state.player.maxHp += 5;
+    state.player.hp = Math.min(state.player.hp + 5, state.player.maxHp);
+    // Wave announcement
+    state.waveAnnounce = { timer: 1500, wave: state.wave };
   }
 
-  // Spawn enemies
-  state.spawnTimer += dt*1000;
-  if (state.spawnTimer >= state.spawnInterval) {
-    state.spawnTimer = 0;
-    for (let i=0; i<state.spawnCount; i++) spawnEnemy();
+  // Spawn enemies (fractional accumulator)
+  state.spawnAccum += state.spawnRate * dt;
+  while (state.spawnAccum >= 1) {
+    spawnEnemy();
+    state.spawnAccum -= 1;
   }
 
   // Weapon pickup spawner
@@ -1318,6 +2506,35 @@ function update(dt, ts) {
     state.weaponPickupTimer = 0;
     spawnWeaponPickup();
   }
+
+  // Coin chest spawner (every ~90s, then difficulty-based drop chance)
+  state.coinChestTimer += dt*1000;
+  if (state.coinChestTimer >= 90000) {
+    state.coinChestTimer = 0;
+    const diff = state.difficulty;
+    if (Math.random() < diff.chestDropChance) {
+      const cx=300+Math.random()*(WORLD_W-600), cy=300+Math.random()*(WORLD_H-600);
+      const baseValue = Math.floor((30 + state.wave * 12) * diff.chestValueMult);
+      const chestValue = Math.floor(baseValue * (0.85 + Math.random() * 0.3));
+      state.coinChests.push({ x:cx, y:cy, value:chestValue, pulse:0, timer:35000 });
+    }
+  }
+
+  // Coin chests pickup
+  state.coinChests = state.coinChests.filter(ch => {
+    ch.timer -= dt*1000;
+    if (ch.timer <= 0) return false;
+    ch.pulse = (ch.pulse||0) + dt*3;
+    const cdx=ch.x-p.x, cdy=ch.y-p.y;
+    if (Math.sqrt(cdx*cdx+cdy*cdy) < 22) {
+      persistentCoins += ch.value;
+      state.coinsThisRun += ch.value;
+      saveCoins();
+      spawnParticles(ch.x, ch.y, '#f1c40f', 6);
+      return false;
+    }
+    return true;
+  });
 
   // Player bullets
   state.bullets = state.bullets.filter(b => {
@@ -1370,13 +2587,13 @@ function update(dt, ts) {
       if (e.fireTimer >= et.fireInterval) {
         e.fireTimer = 0;
         const ang = Math.atan2(p.y-e.y, p.x-e.x);
-        state.enemyBullets.push({ x:e.x, y:e.y, vx:Math.cos(ang)*et.projSpeed, vy:Math.sin(ang)*et.projSpeed, damage:et.projDamage, life:3000, color:'#39d353', radius:6 });
+        state.enemyBullets.push({ x:e.x, y:e.y, vx:Math.cos(ang)*et.projSpeed, vy:Math.sin(ang)*et.projSpeed, damage:et.projDamage * (1 + (state.wave-1) * 0.10) * (e.isElite ? 1.5 : 1) * state.difficulty.enemyDmgMult, life:3000, color: e.isElite ? '#ffd700' : '#39d353', radius: e.isElite ? 8 : 6 });
       }
     } else {
       if (dist > e.size+12) {
         moveEnemyToward(e, et, ex/dist, ey/dist, dt);
       }
-      if (dist < e.size+14 && p.invincible<=0) { damagePlayer(et.damage); p.invincible=600; }
+      if (dist < e.size+14 && p.invincible<=0) { damagePlayer(et.damage * (1 + (state.wave-1) * 0.10) * (e.isElite ? 1.5 : 1) * state.difficulty.enemyDmgMult); p.invincible=600; }
     }
   });
   state.enemies = state.enemies.filter(e => !e.dead);
@@ -1399,6 +2616,33 @@ function update(dt, ts) {
     wp.pulse=(wp.pulse||0)+dt*2; return true;
   });
 
+  // Health & ammo pickups
+  state.pickups = state.pickups.filter(pk => {
+    pk.timer -= dt*1000;
+    if (pk.timer <= 0) return false;
+    pk.pulse = (pk.pulse||0) + dt*3;
+    const dx2=pk.x-p.x, dy2=pk.y-p.y, dist2=Math.sqrt(dx2*dx2+dy2*dy2);
+    if (dist2 < 20) {
+      if (pk.type === 'health') {
+        p.hp = Math.min(p.hp + 25, p.maxHp);
+      } else if (pk.type === 'ammo') {
+        p.weapon.reserveAmmo += Math.ceil(p.weapon.maxAmmo * 0.5);
+      } else if (pk.type === 'coin') {
+        persistentCoins += pk.value;
+        state.coinsThisRun += pk.value;
+        saveCoins();
+        spawnParticles(pk.x, pk.y, '#f1c40f', 4);
+      }
+      return false;
+    }
+    return true;
+  });
+
+  // Wave announcement timer
+  if (state.waveAnnounce.timer > 0) {
+    state.waveAnnounce.timer -= dt*1000;
+  }
+
   // Particles
   state.particles = state.particles.filter(pt => {
     pt.x+=pt.vx*dt; pt.y+=pt.vy*dt; pt.life-=dt*1000; pt.alpha=pt.life/pt.maxLife; return pt.life>0;
@@ -1418,7 +2662,8 @@ function collidesWithObstacles(x, y, r) {
 
 // Move an enemy along (dirX,dirY), steering around obstacles if blocked
 function moveEnemyToward(e, et, dirX, dirY, dt) {
-  const step = et.speed * dt;
+  const speedMult = (e.isElite ? 1.3 : 1) * (e.speedMult || 1);
+  const step = et.speed * speedMult * dt;
   const nx2 = e.x + dirX * step;
   const ny2 = e.y + dirY * step;
   const blockedX = collidesWithObstacles(nx2, e.y, e.size);
@@ -1501,6 +2746,12 @@ function startReload() {
 }
 
 function damagePlayer(dmg) {
+  if (state.player.shield) {
+    state.player.shield = false;
+    spawnParticles(state.player.x, state.player.y, '#00ccff', 10);
+    state.shake.duration = 100;
+    return;
+  }
   state.player.hp -= dmg;
   state.shake.duration = 200;
   if (state.player.hp<=0) { state.player.hp=0; endGame(); }
@@ -1534,20 +2785,43 @@ function spawnEnemy() {
 
   const roll = Math.random();
   let type;
-  if (state.wave<3)      type=roll<0.7?'runner':'brute';
-  else if (state.wave<6) type=roll<0.5?'runner':(roll<0.8?'brute':'spitter');
-  else                   type=roll<0.4?'runner':(roll<0.7?'brute':'spitter');
+  if (state.wave<2)      type='runner';
+  else if (state.wave<3) type=roll<0.5?'runner':(roll<0.8?'crawler':'brute');
+  else if (state.wave<6) type=roll<0.35?'runner':(roll<0.55?'crawler':(roll<0.8?'brute':'spitter'));
+  else                   type=roll<0.25?'runner':(roll<0.45?'crawler':(roll<0.7?'brute':'spitter'));
 
   const et = ENEMY_TYPES[type];
-  state.enemies.push({ x, y, hp:et.hp*(1+(state.wave-1)*0.15), maxHp:et.hp*(1+(state.wave-1)*0.15), type, size:et.size, fireTimer:0, dead:false });
+  const diff = state.difficulty;
+  const hpScale = et.hp*(1+(state.wave-1)*0.15) * diff.enemyHpMult;
+  const isElite = state.wave >= 5 && Math.random() < 0.10;
+  const eliteHpMult = isElite ? 2 : 1;
+  const eliteSizeMult = isElite ? 1.2 : 1;
+  const speedMult = diff.enemySpeedMult;
+  state.enemies.push({ x, y, hp:hpScale*eliteHpMult, maxHp:hpScale*eliteHpMult, type, size:et.size*eliteSizeMult, speedMult, fireTimer:0, dead:false, isElite });
 }
 
 function killEnemy(e) {
   e.dead=true;
   const et=ENEMY_TYPES[e.type];
-  state.kills++; state.score+=et.xp*state.wave;
-  state.xpOrbs.push({ x:e.x, y:e.y, value:et.xp, pulse:0 });
+  const diff = state.difficulty;
+  const xpMult = (e.isElite ? 3 : 1) * diff.xpMult;
+  state.kills++; state.score+=et.xp*state.wave*xpMult;
+  state.xpOrbs.push({ x:e.x, y:e.y, value:Math.floor(et.xp*xpMult), pulse:0 });
   spawnParticles(e.x, e.y, et.color, 8);
+
+  // Coin drop: always drops a coin pickup (walk over to collect)
+  const coinBase = Math.max(1, Math.floor(et.xp / 2));
+  const coinValue = Math.floor(coinBase * (1 + (state.wave - 1) * 0.15) * (e.isElite ? 3 : 1));
+  state.pickups.push({ x:e.x+(Math.random()-0.5)*12, y:e.y+(Math.random()-0.5)*12, type:'coin', value:coinValue, timer:12000, pulse:0 });
+
+  // Health medkit drop: elites always drop, others 15% * dropRateMult
+  if (e.isElite || Math.random() < 0.15 * diff.dropRateMult) {
+    state.pickups.push({ x:e.x, y:e.y, type:'health', timer:15000, pulse:0 });
+  }
+  // Ammo drop: 10% * dropRateMult (elites always)
+  if (e.isElite || Math.random() < 0.10 * diff.dropRateMult) {
+    state.pickups.push({ x:e.x+(Math.random()-0.5)*20, y:e.y+(Math.random()-0.5)*20, type:'ammo', timer:15000, pulse:0 });
+  }
 }
 
 function spawnWeaponPickup() {
@@ -1606,6 +2880,81 @@ function applyUpgrade(id) {
 }
 
 // =============================================================
+// SHOP
+// =============================================================
+function getShopItemCost(item) {
+  const bought = shopBuys[item.id] || 0;
+  return item.baseCost + item.costScale * bought;
+}
+
+function showShop() {
+  gameState='shop';
+  document.getElementById('menuScreen').classList.add('hidden');
+  document.getElementById('shopScreen').classList.remove('hidden');
+  buildShopUI();
+}
+
+function buildShopUI() {
+  document.getElementById('shopCoinsLabel').textContent = `🪙 ${persistentCoins} COINS`;
+
+  // Show queued bonuses for next run
+  const bonusParts = [];
+  if (startingBonuses.extraMaxHp > 0) bonusParts.push(`+${startingBonuses.extraMaxHp} max HP`);
+  if (startingBonuses.extraStartHp > 0) bonusParts.push(`+${startingBonuses.extraStartHp} start HP`);
+  if (startingBonuses.extraSpeed > 0) bonusParts.push(`+${startingBonuses.extraSpeed} speed`);
+  if (startingBonuses.damageBonusMult > 1) bonusParts.push(`+${Math.round((startingBonuses.damageBonusMult-1)*100)}% dmg`);
+  if (startingBonuses.shield) bonusParts.push('shield');
+  if (startingBonuses.fullHeal) bonusParts.push('full heal');
+  if (startingBonuses.ammoRefill) bonusParts.push('ammo refill');
+  if (startingBonuses.hpRegen > 0) bonusParts.push(`+${startingBonuses.hpRegen} HP/s regen`);
+  const hint = document.getElementById('shopBonusHint');
+  if (hint) hint.textContent = bonusParts.length > 0 ? `QUEUED: ${bonusParts.join(' · ')}` : 'No bonuses queued for next run';
+
+  const row = document.getElementById('shopRow');
+  row.innerHTML = '';
+  SHOP_ITEMS.forEach(item => {
+    const cost = getShopItemCost(item);
+    const canAfford = persistentCoins >= cost;
+    const card = document.createElement('div');
+    card.className = 'shop-card' + (canAfford ? '' : ' disabled');
+    card.innerHTML = `<div class="card-icon">${item.icon}</div><div class="card-name">${item.name}</div><div class="card-desc">${item.desc}</div><div class="card-cost">🪙 ${cost}</div>`;
+    if (canAfford) {
+      card.addEventListener('click', () => {
+        applyShopPurchase(item);
+        buildShopUI(); // refresh UI
+      });
+    }
+    row.appendChild(card);
+  });
+}
+
+function applyShopPurchase(item) {
+  const cost = getShopItemCost(item);
+  if (persistentCoins < cost) return;
+  persistentCoins -= cost;
+  shopBuys[item.id] = (shopBuys[item.id] || 0) + 1;
+  saveCoins();
+  saveShopBuys();
+  // Queue the bonus for next run start
+  switch (item.id) {
+    case 'heal25':     startingBonuses.extraStartHp += 25; break;
+    case 'fullheal':   startingBonuses.fullHeal = true; break;
+    case 'maxhp':      startingBonuses.extraMaxHp += 25; break;
+    case 'damage':     startingBonuses.damageBonusMult *= 1.15; break;
+    case 'speed':      startingBonuses.extraSpeed += 20; break;
+    case 'shield':     startingBonuses.shield = true; break;
+    case 'ammorefill': startingBonuses.ammoRefill = true; break;
+    case 'regen':      startingBonuses.hpRegen += 5; break;
+  }
+}
+
+function closeShop() {
+  document.getElementById('shopScreen').classList.add('hidden');
+  document.getElementById('menuScreen').classList.remove('hidden');
+  gameState = 'menu';
+}
+
+// =============================================================
 // GAME OVER
 // =============================================================
 function endGame() {
@@ -1613,6 +2962,7 @@ function endGame() {
   document.getElementById('goScore').textContent=state.score;
   document.getElementById('goWave').textContent=state.wave;
   document.getElementById('goKills').textContent=state.kills;
+  document.getElementById('goCoins').textContent=state.coinsThisRun;
   document.getElementById('gameoverScreen').classList.remove('hidden');
 }
 
@@ -1641,6 +2991,29 @@ function draw() {
   ctx.restore();
 
   if (gameState==='playing'||gameState==='levelup') drawHUD();
+
+  // Wave announcement overlay
+  if (state.waveAnnounce && state.waveAnnounce.timer > 0) {
+    const wa = state.waveAnnounce;
+    const alpha = Math.min(1, wa.timer / 800);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.font = 'bold 64px Courier New';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 6;
+    ctx.strokeText(`WAVE ${wa.wave}`, canvas.width/2, canvas.height/2 - 40);
+    ctx.fillStyle = '#e74c3c';
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = '#e74c3c';
+    ctx.fillText(`WAVE ${wa.wave}`, canvas.width/2, canvas.height/2 - 40);
+    ctx.shadowBlur = 0;
+    ctx.font = 'bold 18px Courier New';
+    ctx.fillStyle = '#ccc';
+    ctx.fillText('SURVIVE', canvas.width/2, canvas.height/2 + 10);
+    ctx.restore();
+  }
 }
 
 function drawWorld() {
@@ -1767,6 +3140,21 @@ function drawPlayer() {
 
   ctx.restore();
 
+  // Shield indicator
+  if (p.shield) {
+    ctx.save();
+    ctx.translate(sx, sy);
+    ctx.strokeStyle = '#00ccff';
+    ctx.lineWidth = 2;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#00ccff';
+    ctx.globalAlpha = 0.5 + Math.sin(Date.now() * 0.005) * 0.2;
+    ctx.beginPath();
+    ctx.arc(0, 0, 18, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   // HP bar above player
   const bw=28, bh=4, bx=sx-bw/2, by=sy-20;
   ctx.fillStyle='#333'; ctx.fillRect(bx,by,bw,bh);
@@ -1775,6 +3163,110 @@ function drawPlayer() {
 }
 
 // ── Enemy sprite drawers (local coords, facing right, centered at 0,0) ──
+
+function drawCrawler(t) {
+  // Flat centipede — low-profile, many legs, skittering fast
+  const scuttle = Math.sin(t * 0.025) * 1.5;
+  const legPhase = t * 0.03;
+
+  // Body segments — elongated, flat, dark brown
+  const segments = [
+    { x: -10, y: 0, w: 5, h: 3.5 },
+    { x: -5,  y: 0, w: 5, h: 4 },
+    { x: 0,   y: 0, w: 5, h: 4.2 },
+    { x: 5,   y: 0, w: 5, h: 3.8 },
+    { x: 10,  y: 0, w: 4, h: 3 },
+  ];
+
+  // Legs — 3 pairs per side, alternating animation
+  ctx.strokeStyle = '#4a2a1a';
+  ctx.lineWidth = 1.2;
+  for (let i = 0; i < 5; i++) {
+    const seg = segments[i];
+    const cx = seg.x + seg.w / 2;
+    const swing = Math.sin(legPhase + i * 1.2) * 3;
+    // Top legs
+    ctx.beginPath();
+    ctx.moveTo(cx, -seg.h / 2);
+    ctx.lineTo(cx + swing, -seg.h / 2 - 5);
+    ctx.lineTo(cx + swing + 1.5, -seg.h / 2 - 7);
+    ctx.stroke();
+    // Bottom legs
+    ctx.beginPath();
+    ctx.moveTo(cx, seg.h / 2);
+    ctx.lineTo(cx - swing, seg.h / 2 + 5);
+    ctx.lineTo(cx - swing - 1.5, seg.h / 2 + 7);
+    ctx.stroke();
+  }
+
+  // Body shell — segmented carapace
+  segments.forEach((seg, i) => {
+    const shade = i === 2 ? '#5a3220' : '#4a2818';
+    ctx.fillStyle = shade;
+    ctx.beginPath();
+    ctx.ellipse(seg.x + seg.w / 2, scuttle * (i % 2 === 0 ? 0.3 : -0.3), seg.w / 2 + 0.5, seg.h / 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Segment line
+    if (i > 0) {
+      ctx.strokeStyle = '#2a1808';
+      ctx.lineWidth = 0.6;
+      ctx.beginPath();
+      ctx.moveTo(seg.x, -seg.h / 2);
+      ctx.lineTo(seg.x, seg.h / 2);
+      ctx.stroke();
+    }
+  });
+
+  // Dorsal ridge — faint line down center
+  ctx.strokeStyle = '#6b4030';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(-10, 0);
+  ctx.lineTo(14, 0);
+  ctx.stroke();
+
+  // Head — pointed, with mandibles
+  ctx.fillStyle = '#5a2a18';
+  ctx.beginPath();
+  ctx.moveTo(14, 0);
+  ctx.lineTo(18, -2);
+  ctx.lineTo(20, 0);
+  ctx.lineTo(18, 2);
+  ctx.closePath();
+  ctx.fill();
+
+  // Mandibles — two pincers
+  const mSnap = Math.sin(t * 0.02) * 1.5;
+  ctx.strokeStyle = '#8a5030';
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(18, -1.5);
+  ctx.lineTo(22, -3 - mSnap);
+  ctx.lineTo(20, -0.5);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(18, 1.5);
+  ctx.lineTo(22, 3 + mSnap);
+  ctx.lineTo(20, 0.5);
+  ctx.stroke();
+
+  // Glowing eyes — small, amber
+  ctx.fillStyle = '#ff8800';
+  ctx.shadowBlur = 4;
+  ctx.shadowColor = '#ff6600';
+  ctx.beginPath(); ctx.arc(17, -1.5, 0.8, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(17, 1.5, 0.8, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Tail — thin, segmented
+  ctx.strokeStyle = '#3a1a0a';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(-10, 0);
+  ctx.lineTo(-14, scuttle * 0.5);
+  ctx.lineTo(-17, -scuttle * 0.3);
+  ctx.stroke();
+}
 
 function drawRunner(t) {
   // Gaunt humanoid ghoul — fast, hunched, lunging forward
@@ -2079,10 +3571,25 @@ function drawEnemies() {
     ctx.scale(sc, sc);
 
     if (e.type === 'runner')       drawRunner(now);
-    else if (e.type === 'brute')   drawBrute(now);
-    else if (e.type === 'spitter') drawSpitter(now);
+    else if (e.type === 'crawler')  drawCrawler(now);
+    else if (e.type === 'brute')    drawBrute(now);
+    else if (e.type === 'spitter')  drawSpitter(now);
 
     ctx.restore();
+
+    // Elite gold outline
+    if (e.isElite) {
+      ctx.save();
+      ctx.strokeStyle = '#ffd700';
+      ctx.lineWidth = 2;
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = '#ffd700';
+      ctx.beginPath();
+      ctx.arc(sx, sy, e.size + 4, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.restore();
+    }
 
     // HP bar above enemy — placed above the tallest point of the sprite
     const hw = e.size * 2.8, hh = 3;
@@ -2126,6 +3633,7 @@ function drawXpOrbs() {
 
 function drawPickups() {
   const cam=state.cam;
+  // Weapon pickups
   state.weaponPickups.forEach(wp => {
     const sx=wp.x-cam.x, sy=wp.y-cam.y, pulse=Math.abs(Math.sin(wp.pulse))*6;
     const wep=WEAPONS[wp.weaponKey];
@@ -2136,6 +3644,98 @@ function drawPickups() {
     ctx.shadowBlur=0;
     ctx.fillStyle=wep.color; ctx.font='bold 9px Courier New'; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(wep.name.slice(0,3),0,0);
+    ctx.restore();
+  });
+
+  // Health & ammo pickups
+  state.pickups.forEach(pk => {
+    const sx=pk.x-cam.x, sy=pk.y-cam.y;
+    const pulse=Math.abs(Math.sin(pk.pulse))*3;
+    const alpha = Math.min(1, pk.timer / 3000); // fade out in last 3s
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(sx, sy);
+    if (pk.type === 'health') {
+      // Red cross medkit
+      ctx.shadowBlur = 8+pulse; ctx.shadowColor = '#ff4444';
+      ctx.fillStyle = '#1a0808';
+      ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#e74c3c';
+      ctx.fillRect(-5, -1.5, 10, 3);
+      ctx.fillRect(-1.5, -5, 3, 10);
+    } else if (pk.type === 'ammo') {
+      // Yellow ammo box
+      ctx.shadowBlur = 8+pulse; ctx.shadowColor = '#f1c40f';
+      ctx.fillStyle = '#2a2200';
+      ctx.fillRect(-8, -6, 16, 12);
+      ctx.strokeStyle = '#f1c40f'; ctx.lineWidth = 1.5;
+      ctx.strokeRect(-8, -6, 16, 12);
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#f1c40f';
+      ctx.font = 'bold 8px Courier New'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('A', 0, 0);
+    } else if (pk.type === 'coin') {
+      // Gold coin
+      ctx.shadowBlur = 8+pulse; ctx.shadowColor = '#f1c40f';
+      ctx.fillStyle = '#c9a400';
+      ctx.beginPath(); ctx.arc(0, 0, 8, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = '#ffe066'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#1a1400';
+      ctx.font = 'bold 9px Courier New'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('¢', 0, 0);
+    }
+    ctx.restore();
+  });
+
+  // Coin chests
+  state.coinChests.forEach(ch => {
+    const sx=ch.x-cam.x, sy=ch.y-cam.y;
+    const pulse=Math.abs(Math.sin(ch.pulse))*6;
+    const alpha = Math.min(1, ch.timer / 5000);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(sx, sy);
+
+    // Outer glow
+    ctx.shadowBlur = 22+pulse; ctx.shadowColor = '#f1c40f';
+
+    // Chest body (big)
+    ctx.fillStyle = '#6b4800';
+    ctx.fillRect(-20, -14, 40, 28);
+    ctx.strokeStyle = '#f1c40f'; ctx.lineWidth = 2.5;
+    ctx.strokeRect(-20, -14, 40, 28);
+
+    // Lid panel
+    ctx.fillStyle = '#7d5500';
+    ctx.fillRect(-20, -14, 40, 10);
+    ctx.strokeStyle = '#ffe066'; ctx.lineWidth = 1;
+    ctx.strokeRect(-20, -14, 40, 10);
+
+    // Lid divider line
+    ctx.beginPath(); ctx.moveTo(-20, -4); ctx.lineTo(20, -4);
+    ctx.strokeStyle = '#c9a400'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // Lock clasp in center
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#f1c40f';
+    ctx.fillRect(-5, -5, 10, 8);
+    ctx.fillStyle = '#3a2800';
+    ctx.beginPath(); ctx.arc(0, -3, 3.5, Math.PI, 0); ctx.fill();
+
+    // Coin value label
+    ctx.fillStyle = '#ffe066';
+    ctx.font = 'bold 10px Courier New'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(`¢${ch.value}`, 0, 10);
+
+    // Corner rivets
+    [[-16,-10],[16,-10],[-16,10],[16,10]].forEach(([rx,ry]) => {
+      ctx.fillStyle = '#c9a400';
+      ctx.beginPath(); ctx.arc(rx, ry, 2.5, 0, Math.PI*2); ctx.fill();
+    });
+
     ctx.restore();
   });
 }
@@ -2209,8 +3809,17 @@ function drawHUD() {
   ctx.fillStyle='#e8e8e8'; ctx.font='11px Courier New';
   ctx.fillText(`SCORE: ${state.score}`, W/2, 38);
 
-  // Clickable PAUSE button below score
-  const pbW=72, pbH=18, pbX=W/2-pbW/2, pbY=46;
+  // Difficulty badge (top center, below score)
+  const diff = state.difficulty;
+  ctx.fillStyle = diff.color + '88'; ctx.font = '9px Courier New';
+  ctx.fillText(diff.name, W/2, 52);
+
+  // Coins (below difficulty)
+  ctx.fillStyle='#f1c40f'; ctx.font='bold 12px Courier New'; ctx.textAlign='center';
+  ctx.fillText(`🪙 ${persistentCoins}`, W/2, 66);
+
+  // Clickable PAUSE button below coins
+  const pbW=72, pbH=18, pbX=W/2-pbW/2, pbY=72;
   hudPauseBtn = { x: pbX, y: pbY, w: pbW, h: pbH };
   ctx.fillStyle='rgba(0,0,0,0.55)';
   ctx.fillRect(pbX, pbY, pbW, pbH);
@@ -2250,7 +3859,7 @@ function startGame() {
 }
 
 function showScreen(id) {
-  ['menuScreen','charScreen','weaponScreen','levelupScreen','gameoverScreen'].forEach(s => {
+  ['menuScreen','diffScreen','charScreen','weaponScreen','levelupScreen','shopScreen','gameoverScreen'].forEach(s => {
     document.getElementById(s).classList.toggle('hidden', s !== id);
   });
 }

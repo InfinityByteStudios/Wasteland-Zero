@@ -1,0 +1,9 @@
+Frontend Design Skill - License
+
+Copyright (c) 2026. All rights reserved.
+
+This skill file and its associated assets are provided for use within
+this project. Redistribution or use outside this project requires
+explicit permission from the author.
+
+Complete terms to be defined by the project owner.
