@@ -238,13 +238,13 @@ The **between-wave shop** opens automatically after each wave. Available items:
 
 ## ⚔️ DIFFICULTY SETTINGS
 
-| Difficulty | Enemy HP | Enemy DMG | Enemy Speed | Spawn Rate | Player HP | Drop Rate | XP Mult |
-|-----------|----------|-----------|-------------|------------|-----------|-----------|---------|
-| EASY | 0.6× | 0.5× | 0.85× | 0.6× | 1.5× | 1.5× | 1.2× |
-| MEDIUM | 0.8× | 0.75× | 0.92× | 0.8× | 1.25× | 1.25× | 1.1× |
-| HARD | 1.0× | 1.0× | 1.0× | 1.0× | 1.0× | 1.0× | 1.0× |
-| DIFFICULT | 1.3× | 1.3× | 1.1× | 1.3× | 0.85× | 0.7× | 0.9× |
-| EXTREME | 1.7× | 1.6× | 1.2× | 1.6× | 0.7× | 0.5× | 0.8× |
+| Difficulty | Enemy HP | Enemy DMG | Enemy Speed | Spawn Rate | Player HP | Drop Rate | XP Mult | Chest Chance | Chest Value |
+|-----------|----------|-----------|-------------|------------|-----------|-----------|---------|-------------|-------------|
+| EASY | 0.6× | 0.5× | 0.85× | 0.6× | 1.5× | 1.5× | 1.2× | 85% | 0.7× |
+| MEDIUM | 0.8× | 0.75× | 0.92× | 0.8× | 1.25× | 1.25× | 1.1× | 70% | 1.0× |
+| HARD | 1.0× | 1.0× | 1.0× | 1.0× | 1.0× | 1.0× | 1.0× | 55% | 1.4× |
+| DIFFICULT | 1.3× | 1.3× | 1.1× | 1.3× | 0.85× | 0.7× | 0.9× | 35% | 2.0× |
+| EXTREME | 1.7× | 1.6× | 1.2× | 1.6× | 0.7× | 0.5× | 0.8× | 20% | 3.5× |
 
 **Hard** is the default and recommended difficulty. All wiki stats reference Hard mode values.
 
@@ -371,17 +371,29 @@ Your final stats are displayed on the game-over screen: wave reached, total kill
 
 ## 🔄 PICKUPS & DROPS
 
-**XP Orbs** — Green glowing orbs dropped by every enemy. Walk over them to collect. Fill the XP bar at the top of the screen. Orb value = enemy XP × difficulty mult × elite mult.
+**XP Orbs** — Green glowing orbs dropped by every enemy. Walk over them to collect. Fill the XP bar at the top of the screen. Orb value = enemy XP × difficulty XP mult × elite mult (3×).
 
-**Health Medkit** — Red cross pickup. 15% drop chance from normal enemies (modified by difficulty). Elites always drop one. Restores a portion of HP. Despawns after 15 seconds.
+**Health Medkit** — Red cross pickup. **15% base drop chance** from normal enemies (× difficulty dropRateMult). Elites **always** drop one. Restores **25 HP**. Despawns after **15 seconds**.
 
-**Ammo Crate** — Yellow box pickup. 20% drop chance from normal enemies.  Elites always drop one. Refills some ammo. Despawns after 15 seconds.
+**Ammo Crate** — Yellow box pickup. **10% base drop chance** from normal enemies (× difficulty dropRateMult). Elites **always** drop one. Refills ammo. Despawns after **15 seconds**.
 
-**Weapon Pickup** — Colored weapon icon on the ground. Walk over it to swap your current weapon. Your old weapon disappears. Spawns periodically in random world positions.
+**Weapon Pickup** — Colored weapon icon (Shotgun or SMG) spawns in a random world position every **60 seconds**. Walk over it to swap your current weapon — your old weapon disappears.
 
-**Coin Chest** — Golden chest with particle effects. Spawns every ~90 seconds. Contains scaled coin value based on wave and difficulty. Don't miss these — they're worth a ton.
+**Coin Drop** — Small gold circle from **every** enemy kill. Value = floor(enemyXP ÷ 2) × (1 + (wave − 1) × 0.15) × eliteMult(3×). Despawns after **12 seconds**.
 
-**Coin Drop** — Small gold circle from every enemy kill. Auto-collected on pickup. Value scales with wave number.
+**Coin Chest** — Golden chest with particle effects. Spawn check every **90 seconds** — whether one actually appears depends on your difficulty's chest drop chance (see table below). Base value = (30 + wave × 12) × chestValueMult, with ±15% random variance. Despawns after **35 seconds**.
+
+### Drop Rate Table by Difficulty
+
+| Difficulty | Health Drop | Ammo Drop | Chest Spawn Chance | Chest Value Mult |
+|-----------|-------------|-----------|-------------------|-----------------|
+| EASY | 22.5% (15% × 1.5) | 15% (10% × 1.5) | 85% | 0.7× |
+| MEDIUM | 18.75% (15% × 1.25) | 12.5% (10% × 1.25) | 70% | 1.0× |
+| HARD | 15% (base) | 10% (base) | 55% | 1.4× |
+| DIFFICULT | 10.5% (15% × 0.7) | 7% (10% × 0.7) | 35% | 2.0× |
+| EXTREME | 7.5% (15% × 0.5) | 5% (10% × 0.5) | 20% | 3.5× |
+
+**Elite enemies bypass drop rates** — they ALWAYS drop both a health medkit and an ammo crate, plus 3× coin value.
 
 ---
 

@@ -4,7 +4,7 @@
 
 A 2D top-down post-apocalyptic survival shooter. Fight waves of mutants in a ruined wasteland, level up, and survive as long as you can.
 
-**Current Version**: `v2.2`
+**Current Version**: `v2.3`
 
 ## Tech Stack
 
@@ -89,6 +89,17 @@ Game runs at `http://localhost:5173`
 ---
 
 ## Changelog
+
+### [v2.3] — 2026-04-02 — Massive Wiki Expansion
+#### Added
+- Wiki expanded from 11 to 22 sections with detailed game data
+- New sections: The Wasteland, Weapon Tactics, Enemy Behavior, Survivor Comparison
+- New sections: Upgrade Deep Dive, Difficulty Settings, Combat Mechanics, Dash Mechanics
+- New sections: Math & Formulas, Game Flow, Pickups & Drops, Energy Shield, Elite Enemies
+- New sections: Challenge Runs, Version History
+- Expanded Build Strategies (7 builds), Tips (20+), FAQ (11 questions)
+- DPS calculations, damage formulas, scaling curves, and exact game data throughout
+- Generic table renderer for data-heavy sections
 
 ### [v2.2] — 2026-04-02 — Wiki Overhaul
 #### Changed

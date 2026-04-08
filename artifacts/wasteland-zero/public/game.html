@@ -800,8 +800,13 @@
   <div class="game-title">WASTELAND ZERO</div>
   <div class="game-subtitle">SURVIVE. KILL. EVOLVE.</div>
   <button class="btn" id="startBtn">ENTER THE WASTELAND</button>
-  <button class="btn secondary" id="menuShopBtn" style="margin-top:8px;width:280px;">🪙 SHOP</button>
-  <button class="btn secondary" id="aboutBtn" style="margin-top:8px;width:280px;">WIKI</button>
+  <!-- More button + dropdown -->
+  <button class="btn secondary" id="moreBtn" style="margin-top:12px;width:280px;">MORE ▾</button>
+  <div id="moreMenu" style="display:none;flex-direction:column;gap:8px;margin-top:6px;width:280px;">
+    <button class="btn secondary" id="menuShopBtn">🪙 SHOP</button>
+    <button class="btn secondary" id="aboutBtn">WIKI</button>
+    <button class="btn secondary" id="menuChangelogBtn">CHANGELOG</button>
+  </div>
   <div class="controls-ref">
     <span>WASD</span> Move &nbsp;|&nbsp; <span>MOUSE</span> Aim &nbsp;|&nbsp; <span>LMB</span> Shoot &nbsp;|&nbsp; <span>R</span> Reload &nbsp;|&nbsp; <span>SPACE / SHIFT</span> Dash &nbsp;|&nbsp; <span>ESC / P</span> Pause<br/>
     Walk over weapons to pick them up &nbsp;|&nbsp; Kill enemies for XP and level up
@@ -930,9 +935,32 @@
 // =============================================================
 // CONSTANTS
 // =============================================================
-const CURRENT_VERSION = 'v2.2';
+const CURRENT_VERSION = 'v2.3';
 
 const CHANGELOG = [
+  {
+    version: 'v2.3',
+    date: '2026-04-02',
+    title: 'Massive Wiki Expansion — 20+ Sections',
+    notes: [
+      'Wiki expanded from 11 to 22 sections with detailed game data',
+      'New: The Wasteland (map info), Weapon Tactics, Enemy Behavior, Survivor Comparison table',
+      'New: Upgrade Deep Dive with stacking math, Difficulty Settings table with all multipliers',
+      'New: Combat Mechanics, Dash Mechanics, Math & Formulas (DPS calcs, HP scaling)',
+      'New: Game Flow walkthrough, Pickups & Drops, Energy Shield guide, Elite Enemies details',
+      'New: Challenge Runs (6 community challenges), Version History',
+      'Expanded Build Strategies from 5 to 7 builds (Glass Cannon, Immortal)',
+      'Expanded Tips & Tricks from 12 to 20+ tips',
+      'Expanded FAQ from 6 to 11 questions',
+      'All sections include exact game data: damage formulas, DPS calculations, scaling curves',
+      'Generic table renderer for Difficulty and Survivor Comparison tables',
+      '34 section color entries for sidebar highlighting',
+      'Drop Rate Table added — exact health/ammo drop % per difficulty with formulas',
+      'Difficulty Settings table expanded with Chest Chance and Chest Value columns',
+      'Fixed ammo crate drop rate (10% base, not 20%)',
+      'Coin drop formula, despawn timers, and weapon pickup spawn rate documented',
+    ]
+  },
   {
     version: 'v2.2',
     date: '2026-04-02',
@@ -996,7 +1024,7 @@ const CHANGELOG = [
       // Wave Rebalance & Drops
       'Smooth spawn curve — gentler wave 1 (runners only), gradual ramp (+0.12/s per wave)',
       'Enemy damage scales +10% per wave; player gains +5 max HP per wave (slower than enemies)',
-      'Health medkit drops (15% chance, heals 25) and ammo crate drops (20% chance) on enemy death',
+      'Health medkit drops (15% chance, heals 25) and ammo crate drops (10% chance) on enemy death',
       'Elite enemies from wave 5+ (gold outline, 2× HP, 1.3× speed, 1.5× damage, 3× XP)',
       'Elites always drop health + ammo; pickups fade out after 15 seconds',
       'Wave announcement overlay ("WAVE X" text on wave transition)',
@@ -2195,12 +2223,18 @@ function closePause() {
 document.getElementById('pauseResumeBtn').addEventListener('click', closePause);
 
 document.getElementById('pauseChangelogBtn').addEventListener('click', () => {
+  changelogSource = 'pause';
   buildChangelogList();
   document.getElementById('changelogScreen').classList.remove('hidden');
 });
 
 document.getElementById('changelogBackBtn').addEventListener('click', () => {
   document.getElementById('changelogScreen').classList.add('hidden');
+  if (changelogSource === 'menu') {
+    showScreen('menuScreen');
+    gameState = 'menu';
+  }
+  changelogSource = null;
 });
 
 document.getElementById('pauseMenuBtn').addEventListener('click', () => {
@@ -2212,6 +2246,24 @@ document.getElementById('pauseMenuBtn').addEventListener('click', () => {
 
 // Set version tag on main menu
 document.getElementById('menuVersion').textContent = CURRENT_VERSION;
+
+// More menu toggle
+let changelogSource = null;
+document.getElementById('moreBtn').addEventListener('click', () => {
+  const m = document.getElementById('moreMenu');
+  const open = m.style.display === 'flex';
+  m.style.display = open ? 'none' : 'flex';
+  document.getElementById('moreBtn').textContent = open ? 'MORE ▾' : 'MORE ▴';
+});
+
+// What's New banner removed
+// Changelog button inside More menu
+document.getElementById('menuChangelogBtn').addEventListener('click', () => {
+  changelogSource = 'menu';
+  buildChangelogList();
+  document.getElementById('changelogScreen').classList.remove('hidden');
+  showScreen(null);
+});
 
 // =============================================================
 // WORLD GENERATION
